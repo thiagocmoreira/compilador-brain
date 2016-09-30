@@ -7,11 +7,10 @@
 
 
 %%
-    ;RESERVED WORDS
-    and                                 {return AND;}
-    begin                               {return BEGIN;}
-    case                                {return CASE;}
-    char                                {return CHAR;}
+and                                 {return AND;}
+begin                               {return BEGIN_STATEMENT;}
+case                                {return CASE;}
+char                                {return CHAR;}
     const                               {return CONST;}
     div                                 {return DIV;}
     do                                  {return DO;}
@@ -26,8 +25,8 @@
     not                                 {return NOT;}
     or                                  {return OR;}
     procedure                           {return PROCEDURE;}
-    program                             {return PROGRAM;}
-    string                              {return STRING;}
+    program                             {printf("asuhdasuhd\n");return PROGRAM;}
+    string                              {return STRING_RESERVED;}
     then                                {return THEN;}
     to                                  {return TO;}
     type                                {return TYPE;}
@@ -40,7 +39,7 @@
 
     [\n]                                {lineCounter++;}
 
-    [ \t]+                              ;IGNORE THAT
+  [ \t]+                                {/*nothing to do */}
 
     [a-zA-Z]                            {return SIMPLE_WORD;}
     [a-zA-Z][a-zA-Z0-9]*                {return IDENTIFIER;}
@@ -49,7 +48,6 @@
     [0-9]+                              {return NATURAL_NUMBER;}
     [0-9]+\.[0-9]+("E"[0-9]+)?          {return REAL_NUMBER;}
 
-    ;OPERATORS
     "."                                 {return POINT;}
     "^"                                 {return POWER;}
     ";"                                 {return SEMICOLON;}
@@ -63,9 +61,9 @@
     "/"                                 {return DIVIDE;}
     "="                                 {return EQUAL;}
     "#"                                 {return DIFFERENT;}
-    ">"                                 {return BIGGER;}
     "<"                                 {return SMALLER;}
     "<="                                {return SMALLER_EQUAL;}
+    ">"                                 {return BIGGER;}
     ">="                                {return BIGGER_EQUAL;}
 
 %%
