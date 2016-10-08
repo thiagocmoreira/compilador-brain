@@ -63,11 +63,11 @@
 
 %%
     PROGRAM_BEGGINING:
-        HEADER {} END POINT
+        Header {} END POINT
         ;
 
-    HEADER:
-        PROGRAM IDENTIFIER SEMICOLON
+    Header:
+        PROGRAM IDENTIFIER SEMICOLON {printf("#include <stdio.h>\n#include <stdlib.h>\n#include <math.h>\n\n")}
         ;
 
 %%
