@@ -2,11 +2,32 @@
     #include <stdio.h>
     #include <stdlib.h>
     #include <string.h>
-    extern char* yytext;
+    #include "global.h"
     extern int lineCounter;
-%}
+    FILE *file = NULL;
+    void openOutputFile(char *algorithm_name) {
+        if (!file) {
+            char file_name[60];
+            sprintf(file_name, "%s.c", algorithm_name);
+            file = fopen(file_name, "w");
+        }
+    }
+    void closeOutputFile() {
+        if (file != NULL) {
+            printf("fechou\n");
+            fclose(file);
+        }
+    }
 
+
+%}
+%union {
+    int ival;
+    double dval;
+    char* strval;
+}
 //token declarations
+    %token RESERVEDS_WORDS
     %token AND
     %token BEGIN_STATEMENT
     %token CASE
@@ -37,7 +58,7 @@
     %token BOOLEAN
     %token REAL
     %token SIMPLE_WORD
-    %token IDENTIFIER
+    %token <strval> IDENTIFIER
     %token STRING
     %token NATURAL_NUMBER
     %token REAL_NUMBER
@@ -63,11 +84,15 @@
 
 %%
     PROGRAM_BEGGINING:
-        Header {} END POINT
+        Header {} END POINT {closeOutputFile();}
         ;
 
     Header:
-        PROGRAM IDENTIFIER SEMICOLON {printf("#include <stdio.h>\n#include <stdlib.h>\n#include <math.h>\n\n")}
+        PROGRAM IDENTIFIER  SEMICOLON {
+            printf("%s\n", $2);
+            openOutputFile($2);
+            printf("#include <stdio.h>\n#include <stdlib.h>\n#include <math.h>\n\n");
+        }
         ;
 
 %%

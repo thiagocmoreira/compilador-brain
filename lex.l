@@ -2,11 +2,15 @@
     #include <stdio.h>
     #include <stdlib.h>
     #include <string.h>
+    #define YYSTYPE char*
     int lineCounter = 1;
 %}
 
+all_reserved (union)
+
 
 %%
+all_reserved                        {return RESERVEDS_WORDS;}
 and                                 {return AND;}
 begin                               {return BEGIN_STATEMENT;}
 case                                {return CASE;}
@@ -42,7 +46,10 @@ real                                {return REAL;}
 [ \t]+                                {/*nothing to do */}
 
 [a-zA-Z]                            {return SIMPLE_WORD;}
-[a-zA-Z][a-zA-Z0-9]*                {return IDENTIFIER;}
+[a-zA-Z][a-zA-Z0-9]*                {yylval.strval = strdup(yytext);
+                                      printf("%s\n", yylval.strval);
+                                      printf("asdasdadasdas\n");
+                                      return IDENTIFIER;}
 "'"([^'])*"'"                       {return STRING;}
 
 [0-9]+                              {return NATURAL_NUMBER;}
