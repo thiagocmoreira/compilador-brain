@@ -30,24 +30,27 @@
     %token RESERVEDS_WORDS
     %token AND
     %token BEGIN_STATEMENT
+    %token BOOLEAN_TYPE
     %token CASE
-    %token CHAR
+    %token <strval> CHAR_TYPE
     %token CONST
     %token DIV
     %token DO
     %token ELSE
     %token END
+    %token EOL
     %token FALSE
     %token FOR
     %token FUNCTION
     %token IF
-    %token INTEGER
+    %token <strval> INTEGER_TYPE
     %token INTERFACE
+    %token <strval> NAME_VARIABLE
     %token NOT
     %token OR
     %token PROCEDURE
     %token PROGRAM
-    %token STRING_RESERVED
+    %token <strval> STRING_TYPE
     %token THEN
     %token TO
     %token TYPE
@@ -57,8 +60,7 @@
     %token WHILE
     %token WRITE
     %token WRITELN
-    %token BOOLEAN
-    %token REAL
+    %token <strval> REAL_TYPE
     %token SIMPLE_WORD
     %token <strval> IDENTIFIER
     %token <strval> STRING
@@ -86,7 +88,7 @@
 
 %%
     ProgramBegining:
-        Header FirstBegin END POINT { writeEndMain(file);closeOutputFile();}
+        Header HeaderVariables Variables FirstBegin END POINT { writeEndMain(file);closeOutputFile();}
         ;
 
     Header:
@@ -95,9 +97,17 @@
             writeLibrary(file);
         }
         ;
+    HeaderVariables:
+        VAR
+        ;
+
+    Variables:
+        COLON INTEGER_TYPE SEMICOLON {
+          writeSimpleVariable(file, $1, $3);
+        }
+        ;
 
     FirstBegin:
-
         BEGIN_STATEMENT {writeMain(file);} Body
         ;
 
@@ -110,12 +120,13 @@
             writePrintLN(file, $3);
         }
         ;
-    Type:
-        INTEGER
-        | CHAR
-        | BOOLEAN
-        ;
 
+    Type:
+        INTEGER_TYPE
+        | CHAR_TYPE
+        | BOOLEAN_TYPE
+        | REAL_TYPE
+        ;
 %%
 #include "lex.yy.c"
 int yyerror (void){

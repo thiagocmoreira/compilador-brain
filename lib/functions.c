@@ -34,3 +34,12 @@ void writePrintLN(FILE *file, const char *string){
     strcat(print, "\\n\");");
     writeIntoFile(file, print);
 }
+
+void writeSimpleVariable(FILE *file, const char *name, const char *type){
+    char print[60] = "";
+    strcat(print, type);
+    strcat(print, " ");
+    strcat(print, name);
+    strcat(print, ";\n");
+    writeIntoFile(file, print);
+}
