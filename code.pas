@@ -1,3 +1,4 @@
-program teste;
+program asudhaudh;
 
+begin
 end.

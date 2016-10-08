@@ -2,6 +2,7 @@
     #include <stdio.h>
     #include <stdlib.h>
     #include <string.h>
+    #include "lib/functions.c"
     #include "global.h"
     extern int lineCounter;
     FILE *file = NULL;
@@ -14,7 +15,6 @@
     }
     void closeOutputFile() {
         if (file != NULL) {
-            printf("fechou\n");
             fclose(file);
         }
     }
@@ -84,20 +84,33 @@
 
 %%
     PROGRAM_BEGGINING:
-        Header {} END POINT {closeOutputFile();}
+        Header Body END POINT { writeEndMain(file);
+                                closeOutputFile();
+                              }
         ;
 
     Header:
         PROGRAM IDENTIFIER  SEMICOLON {
-            printf("%s\n", $2);
             openOutputFile($2);
-            printf("#include <stdio.h>\n#include <stdlib.h>\n#include <math.h>\n\n");
+            writeLibrary(file);
         }
+        ;
+
+    Body:
+        BEGIN_STATEMENT {
+            writeMain(file);
+        }
+        ;
+
+    Type:
+        INTEGER
+        | CHAR
+        | BOOLEAN
         ;
 
 %%
 #include "lex.yy.c"
-yyerror (void){
+int yyerror (void){
 	printf("Erro na Linha: %d\n", lineCounter);
 }
 

@@ -46,10 +46,7 @@ real                                {return REAL;}
 [ \t]+                                {/*nothing to do */}
 
 [a-zA-Z]                            {return SIMPLE_WORD;}
-[a-zA-Z][a-zA-Z0-9]*                {yylval.strval = strdup(yytext);
-                                      printf("%s\n", yylval.strval);
-                                      printf("asdasdadasdas\n");
-                                      return IDENTIFIER;}
+[a-zA-Z][a-zA-Z0-9]*                {yylval.strval = strdup(yytext);return IDENTIFIER;}
 "'"([^'])*"'"                       {return STRING;}
 
 [0-9]+                              {return NATURAL_NUMBER;}
