@@ -39,12 +39,13 @@ until                               {return UNTIL;}
 var                                 {return VAR;}
 while                               {return WHILE;}
 write                               {return WRITE;}
+writeln                             {return WRITELN;}
 boolean                             {return BOOLEAN;}
 real                                {return REAL;}
 
 [\n]                                {lineCounter++;}
 
-[ \t]+                                {/*nothing to do */}
+[ \t]+                              {/*nothing to do */}
 
 [a-zA-Z]                            {return SIMPLE_WORD;}
 [a-zA-Z][a-zA-Z0-9]*                {yylval.strval = strdup(yytext);return IDENTIFIER;}

@@ -27,3 +27,10 @@ void writeSimplePrint(FILE *file, const char *string){
     strcat(print, "\");");
     writeIntoFile(file, print);
 }
+void writePrintLN(FILE *file, const char *string){
+    char print[60] = "";
+    strcat(print, "\n\tprintf(\"");
+    strcat(print, string);
+    strcat(print, "\\n\");");
+    writeIntoFile(file, print);
+}

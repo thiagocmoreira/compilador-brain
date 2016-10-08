@@ -56,6 +56,7 @@
     %token VAR
     %token WHILE
     %token WRITE
+    %token WRITELN
     %token BOOLEAN
     %token REAL
     %token SIMPLE_WORD
@@ -85,9 +86,7 @@
 
 %%
     ProgramBegining:
-        Header FirstBegin END POINT { writeEndMain(file);
-                                closeOutputFile();
-                              }
+        Header FirstBegin END POINT { writeEndMain(file);closeOutputFile();}
         ;
 
     Header:
@@ -98,14 +97,17 @@
         ;
 
     FirstBegin:
-        BEGIN_STATEMENT {
-            writeMain(file);
-        } Body
+
+        BEGIN_STATEMENT {writeMain(file);} Body
         ;
 
     Body:
         WRITE LEFT_PARENTHESIS STRING RIGHT_PARENTHESIS SEMICOLON {
             writeSimplePrint(file, $3);
+        }
+        |
+        WRITELN LEFT_PARENTHESIS STRING RIGHT_PARENTHESIS SEMICOLON {
+            writePrintLN(file, $3);
         }
         ;
     Type:
