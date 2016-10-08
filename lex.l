@@ -38,6 +38,7 @@ true                                {return TRUE;}
 until                               {return UNTIL;}
 var                                 {return VAR;}
 while                               {return WHILE;}
+write                               {return WRITE;}
 boolean                             {return BOOLEAN;}
 real                                {return REAL;}
 
@@ -47,7 +48,12 @@ real                                {return REAL;}
 
 [a-zA-Z]                            {return SIMPLE_WORD;}
 [a-zA-Z][a-zA-Z0-9]*                {yylval.strval = strdup(yytext);return IDENTIFIER;}
-"'"([^'])*"'"                       {return STRING;}
+"'"([^'])*"'"                       {
+                                      yytext = yytext + 1;
+                                      yytext[strlen(yytext)-1] = 0;
+                                      yylval.strval = strdup(yytext);
+                                      return STRING;
+                                    }
 
 [0-9]+                              {return NATURAL_NUMBER;}
 [0-9]+\.[0-9]+("E"[0-9]+)?          {return REAL_NUMBER;}

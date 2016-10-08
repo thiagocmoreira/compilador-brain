@@ -55,11 +55,12 @@
     %token UNTIL
     %token VAR
     %token WHILE
+    %token WRITE
     %token BOOLEAN
     %token REAL
     %token SIMPLE_WORD
     %token <strval> IDENTIFIER
-    %token STRING
+    %token <strval> STRING
     %token NATURAL_NUMBER
     %token REAL_NUMBER
     %token POINT
@@ -80,11 +81,11 @@
     %token BIGGER
     %token BIGGER_EQUAL
 
-    %start PROGRAM_BEGGINING
+    %start ProgramBegining
 
 %%
-    PROGRAM_BEGGINING:
-        Header Body END POINT { writeEndMain(file);
+    ProgramBegining:
+        Header FirstBegin END POINT { writeEndMain(file);
                                 closeOutputFile();
                               }
         ;
@@ -96,12 +97,17 @@
         }
         ;
 
-    Body:
+    FirstBegin:
         BEGIN_STATEMENT {
             writeMain(file);
-        }
+        } Body
         ;
 
+    Body:
+        WRITE LEFT_PARENTHESIS STRING RIGHT_PARENTHESIS SEMICOLON {
+            writeSimplePrint(file, $3);
+        }
+        ;
     Type:
         INTEGER
         | CHAR

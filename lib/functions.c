@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 void writeIntoFile(FILE* file, const char* content) {
     if (file != NULL) {
@@ -17,4 +18,12 @@ void writeMain(FILE *file){
 }
 void writeEndMain(FILE *file){
     writeIntoFile(file, "\n\treturn 0;\n}\n");
+}
+
+void writeSimplePrint(FILE *file, const char *string){
+    char print[60] = "";
+    strcat(print, "\n\tprintf(\"");
+    strcat(print, string);
+    strcat(print, "\");");
+    writeIntoFile(file, print);
 }

@@ -1,4 +1,5 @@
-program asudhaudh;
+program teste;
 
 begin
+  write('teste');
 end.
