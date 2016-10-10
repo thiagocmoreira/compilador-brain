@@ -30,7 +30,6 @@
     %token RESERVEDS_WORDS
     %token AND
     %token BEGIN_STATEMENT
-    %token BOOLEAN_TYPE
     %token CASE
     %token <strval> CHAR_TYPE
     %token CONST
@@ -50,7 +49,6 @@
     %token OR
     %token PROCEDURE
     %token PROGRAM
-    %token <strval> STRING_TYPE
     %token THEN
     %token TO
     %token TYPE
@@ -84,6 +82,11 @@
     %token BIGGER
     %token BIGGER_EQUAL
 
+    %type <strval> Type
+
+    %left INTEGER_TYPE
+    %right IDENTIFIER
+
     %start ProgramBegining
 
 %%
@@ -102,7 +105,8 @@
         ;
 
     Variables:
-        COLON INTEGER_TYPE SEMICOLON {
+        IDENTIFIER COLON Type SEMICOLON {
+          printf("%s\n", $3);
           writeSimpleVariable(file, $1, $3);
         }
         ;
@@ -124,7 +128,6 @@
     Type:
         INTEGER_TYPE
         | CHAR_TYPE
-        | BOOLEAN_TYPE
         | REAL_TYPE
         ;
 %%

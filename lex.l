@@ -47,12 +47,17 @@ while                               {return WHILE;}
 write                               {return WRITE;}
 writeln                             {return WRITELN;}
 
+"char"                              { yylval.strval = strdup(yytext); return(CHAR_TYPE); }
+"integer"                           {yylval.strval = "int"; return(INTEGER_TYPE); }
+"real"                              { yylval.strval = "float"; return(REAL_TYPE); }
+
+
 [\n]                                {lineCounter++;}
 
 [ \t]+                              {/*nothing to do */}
 
 [a-zA-Z]                            {return SIMPLE_WORD;}
-[a-zA-Z][a-zA-Z0-9]*                {yylval.strval = strdup(yytext);return IDENTIFIER;}
+[a-zA-Z][a-zA-Z0-9]*                {printf("identifier: %s\n", yytext);yylval.strval = strdup(yytext);return IDENTIFIER;}
 "'"([^'])*"'"                       {
                                       yytext = yytext + 1;
                                       yytext[strlen(yytext)-1] = 0;
@@ -84,10 +89,5 @@ writeln                             {return WRITELN;}
 
 {variable}                          { yylval.strval = strdup(yytext); return(NAME_VARIABLE); }
 
-;"boolean"                          {return BOOLEAN_TYPE;}
-"char"                              { yylval.strval = strdup(yytext); return(CHAR_TYPE); }
-"integer"                           { yylval.ival = atoi(yytext); return(INTEGER_TYPE); }
-"real"                              { yylval.dval = atoi(yytext); return(REAL_TYPE); }
-"string"                            { yylval.strval = strdup(yytext);	return(STRING_TYPE);}
 
 %%

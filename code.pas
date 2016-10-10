@@ -1,7 +1,7 @@
 program teste;
 
 var
-  variavel_teste : integer;
+  variavelteste : real;
 
 begin
   writeln('teste');
