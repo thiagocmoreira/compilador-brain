@@ -1,7 +1,8 @@
-typedef struct Variable{
+typedef struct VariableStruct{
+
     char *name;
     char *type;
 
-}variable;
+}Variable;
 
 Variable *newVariable(const char *name, const char *type);

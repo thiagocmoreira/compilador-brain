@@ -1,15 +1,22 @@
-typedef struct SymbolTable{
+#include "variable.h"
 
-    Variable *createdVariable;
-    SymbolTable *nextNode;
+typedef struct Symbol_Table{
 
-}symbolTable;
+    Node *root;
+    size_t size;
 
+}SymbolTable;
 
-SymbolTable *newSymbol(Variable *var);
+Node* SymbolTableSearchNode(SymbolTable* simbol_table, char* name);
 
-SymbleTable *searchElement(void); //dont think about parameters for this function
+SymbolTable *new(void);
 
-void insertSymbolElement(SymbolTable *element);
+Variable* SymbolTable_find(SymbolTable* simbol_table, char* name);
 
-void destroyElement(SymbolTable *element);
+int SymbolTable_insert_variable(SymbolTable* simbol_table, Variable* variable);
+
+int SymbolTable_insert(SymbolTable* simbol_table, char* name, char* type);
+
+void SymbolTable_destroy(SymbolTable* simbol_table);
+
+Variable* SymbolTable_get_variables_as_array(SymbolTable* simbol_table);

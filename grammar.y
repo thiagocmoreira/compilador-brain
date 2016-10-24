@@ -4,6 +4,8 @@
     #include <string.h>
     #include "lib/functions.c"
     #include "global.h"
+    #include "lib/node.c"
+
     extern int lineCounter;
     FILE *file = NULL;
     void openOutputFile(char *algorithm_name) {

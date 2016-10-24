@@ -3,10 +3,10 @@
 
 
 Variable *newVariable(const char *name, const char *type){
-    Variable createdVariable = (Variable *)malloc(sizeof(Variable));
+    Variable variable = (Variable *)malloc(sizeof(Variable));
 
-    createdVariable->name = name;
-    createdVariable->type = type;
+    variable->name = name;
+    variable->type = type;
 
-    return createdVariable;
+    return variable;
 }
