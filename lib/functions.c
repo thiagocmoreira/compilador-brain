@@ -43,3 +43,33 @@ void writeSimpleVariable(FILE *file, const char *name, const char *type){
     strcat(print, ";\n");
     writeIntoFile(file, print);
 }
+
+void writeSimpleAritmetic(FILE *file, char *name, char *number1, char *operator, char *number2){
+    char print[80] = "";
+    strcat(print, "\n\t");
+    strcat(print, name);
+    strcat(print, " = ");
+    strcat(print, number1);
+    strcat(print, " ");
+    strcat(print, operator);
+    strcat(print, " ");
+    strcat(print, number2);
+    strcat(print, ";\n");
+    writeIntoFile(file, print);
+}
+
+void writeSimpleAritmeticParenthesis(FILE *file, char *name, char *number1, char *operator, char *number2){
+    char print[80] = "";
+    strcat(print, "\n\t");
+    strcat(print, name);
+    strcat(print, " = ");
+    strcat(print, "( ");
+    strcat(print, number1);
+    strcat(print, " ");
+    strcat(print, operator);
+    strcat(print, " ");
+    strcat(print, number2);
+    strcat(print, " )");
+    strcat(print, ";\n");
+    writeIntoFile(file, print);
+}

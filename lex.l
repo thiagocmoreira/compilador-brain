@@ -57,7 +57,7 @@ writeln                             {return WRITELN;}
 [ \t]+                              {/*nothing to do */}
 
 [a-zA-Z]                            {return SIMPLE_WORD;}
-[a-zA-Z][a-zA-Z0-9]*                {printf("identifier: %s\n", yytext);yylval.strval = strdup(yytext);return IDENTIFIER;}
+{letter}({integer}|{letter}|"_")*   {printf("identifier: %s\n", yytext);yylval.strval = strdup(yytext);return IDENTIFIER;}
 "'"([^'])*"'"                       {
                                       yytext = yytext + 1;
                                       yytext[strlen(yytext)-1] = 0;
@@ -65,8 +65,8 @@ writeln                             {return WRITELN;}
                                       return STRING;
                                     }
 
-[0-9]+                              {return NATURAL_NUMBER;}
-[0-9]+\.[0-9]+("E"[0-9]+)?          {return REAL_NUMBER;}
+[0-9]+                              {yylval.strval = strdup(yytext); return NATURAL_NUMBER;}
+[0-9]+\.[0-9]+("E"[0-9]+)?          {yylval.strval = strdup(yytext); return REAL_NUMBER;}
 
 "."                                 {return POINT;}
 "^"                                 {return POWER;}
@@ -75,10 +75,10 @@ writeln                             {return WRITELN;}
 ")"                                 {return RIGHT_PARENTHESIS;}
 ":"                                 {return COLON;}
 ":="                                {return ASSIGNMENT;}
-"+"                                 {return PLUS;}
-"-"                                 {return MINUS;}
-"*"                                 {return TIMES;}
-"/"                                 {return DIVIDE;}
+"+"                                 { yylval.strval = strdup(yytext); return PLUS; }
+"-"                                 { yylval.strval = strdup(yytext); return MINUS; }
+"*"                                 { yylval.strval = strdup(yytext); return TIMES; }
+"/"                                 { yylval.strval = strdup(yytext); return DIVIDE; }
 "="                                 {return EQUAL;}
 "#"                                 {return DIFFERENT;}
 "<"                                 {return SMALLER;}

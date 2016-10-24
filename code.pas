@@ -1,8 +1,9 @@
 program teste;
 
 var
-  variavelteste : real;
+  variavel_teste : real;
 
 begin
   writeln('teste');
+  variavel_teste := (5 + 5);
 end.

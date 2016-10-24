@@ -64,8 +64,8 @@
     %token SIMPLE_WORD
     %token <strval> IDENTIFIER
     %token <strval> STRING
-    %token NATURAL_NUMBER
-    %token REAL_NUMBER
+    %token <strval> NATURAL_NUMBER
+    %token <strval> REAL_NUMBER
     %token POINT
     %token POWER
     %token SEMICOLON
@@ -73,11 +73,11 @@
     %token RIGHT_PARENTHESIS
     %token COLON
     %token ASSIGNMENT
-    %token PLUS
-    %token MINUS
-    %token TIMES
-    %token DIVIDE
-    %token EQUAL
+    %token <strval> PLUS
+    %token <strval> MINUS
+    %token <strval> TIMES
+    %token <strval> DIVIDE
+    %token <strval> EQUAL
     %token DIFFERENT
     %token SMALLER
     %token SMALLER_EQUAL
@@ -85,25 +85,32 @@
     %token BIGGER_EQUAL
 
     %type <strval> Type
-
-    %left INTEGER_TYPE
-    %right IDENTIFIER
+    %type <strval> Number
+    %type <strval> Operator
+    %type <strval> Aritmetic
 
     %start ProgramBegining
 
 %%
     ProgramBegining:
-        Header HeaderVariables Variables FirstBegin END POINT { writeEndMain(file);closeOutputFile();}
+        Header FirstBegin
         ;
 
     Header:
+        HeaderAlgorithm
+        |HeaderAlgorithm HeaderVariables
+        ;
+
+    HeaderAlgorithm:
         PROGRAM IDENTIFIER  SEMICOLON {
             openOutputFile($2);
             writeLibrary(file);
         }
         ;
+
     HeaderVariables:
         VAR
+        | VAR Variables
         ;
 
     Variables:
@@ -113,11 +120,25 @@
         }
         ;
 
+    Type:
+        INTEGER_TYPE
+        | CHAR_TYPE
+        | REAL_TYPE
+        ;
+
     FirstBegin:
-        BEGIN_STATEMENT {writeMain(file);} Body
+        BEGIN_STATEMENT {writeMain(file);} END POINT { writeEndMain(file);closeOutputFile();}
+        | BEGIN_STATEMENT {writeMain(file);} Body END POINT { writeEndMain(file);closeOutputFile();}
         ;
 
     Body:
+        WriteFunctions
+        | WriteFunctions Body
+        | Aritmetic
+        | Aritmetic Body
+
+        ;
+    WriteFunctions:
         WRITE LEFT_PARENTHESIS STRING RIGHT_PARENTHESIS SEMICOLON {
             writeSimplePrint(file, $3);
         }
@@ -127,11 +148,29 @@
         }
         ;
 
-    Type:
-        INTEGER_TYPE
-        | CHAR_TYPE
-        | REAL_TYPE
+    Number:
+        NATURAL_NUMBER
+        | REAL_NUMBER
         ;
+
+    Operator:
+        PLUS
+        | MINUS
+        | DIVIDE
+        | TIMES
+    ;
+
+    Aritmetic:
+        IDENTIFIER ASSIGNMENT Number Operator Number SEMICOLON{
+          writeSimpleAritmetic(file, $1, $3, $4, $5);
+          printf("variavel: %s\n", $1);
+          printf("numero1: %s\n", $3);
+          printf("operador: %s\n", $4);
+          printf("numero2: %s\n", $5);
+          }
+        | IDENTIFIER ASSIGNMENT LEFT_PARENTHESIS Number PLUS Number RIGHT_PARENTHESIS SEMICOLON{
+          writeSimpleAritmeticParenthesis(file, $1, $4, $5, $6);
+          }
 %%
 #include "lex.yy.c"
 int yyerror (void){
