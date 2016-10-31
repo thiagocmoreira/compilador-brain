@@ -2,6 +2,31 @@
 #include <stdlib.h>
 #include <string.h>
 
+typedef struct ListVariable_{
+    char *name;
+    struct ListVariable_ *next;
+}ListVariable;
+
+ListVariable *rootVariable = NULL;
+
+void insertVariableOnList(const char* name){
+    if(rootVariable == NULL){
+        rootVariable = (ListVariable*)malloc(sizeof(ListVariable));
+        rootVariable->name = name;
+        rootVariable->next = NULL;
+    }else{
+        ListVariable *aux = rootVariable;
+        while(aux->next != NULL){
+            aux = aux->next;
+        }
+        aux->next = (ListVariable*)malloc(sizeof(ListVariable));
+        aux = aux->next;
+        aux->name = name;
+        aux->next = NULL;
+    }
+
+}
+
 void writeIntoFile(FILE* file, const char* content) {
     if (file != NULL) {
         fprintf(file, "%s", content);
@@ -42,6 +67,29 @@ void writeSimpleVariable(FILE *file, const char *name, const char *type){
     strcat(print, name);
     strcat(print, ";\n");
     writeIntoFile(file, print);
+}
+
+void printListVariables(FILE *file){
+    if(rootVariable != NULL){
+        writeIntoFile(file, rootVariable->name);
+        ListVariable *aux = rootVariable;
+        while(aux->next != NULL){
+            writeIntoFile(file, ", ");
+            aux = aux->next;
+            writeIntoFile(file, aux->name);
+        }
+    }else{
+        // nothing to do
+    }
+    writeIntoFile(file, ";\n\t");
+}
+
+void writeVariables(FILE *file, const char *type){
+    char print[20] = "";
+    strcat(print, type);
+    strcat(print, " ");
+    writeIntoFile(file, print);
+    printListVariables(file);
 }
 
 void writeSimpleAritmetic(FILE *file, char *name, char *number1, char *operator, char *number2){

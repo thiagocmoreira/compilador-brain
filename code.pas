@@ -1,7 +1,7 @@
 program teste;
 
 var
-  variavel_teste : real;
+  variavel_teste, teste, asdasm, dasdas, asudhsauhd: real;
 
 begin
   writeln('teste');
