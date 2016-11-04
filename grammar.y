@@ -124,16 +124,14 @@
 
     Variables:
         IDENTIFIER VIRGULA {insertVariableOnList($1);} Variables
-        | IDENTIFIER {insertVariableOnList($1);} COLON Type SEMICOLON {
-            writeVariables(file, $4);
-        } Variables
+        | IDENTIFIER {insertVariableOnList($1);} COLON Type {rootVariable->type = $4;} SEMICOLON Variables
         |
         ;
 
 
     FirstBegin:
         BEGIN_STATEMENT {writeMain(file);} END POINT { writeEndMain(file);closeOutputFile();}
-        | BEGIN_STATEMENT {writeMain(file);} Body END POINT { writeEndMain(file);closeOutputFile();}
+        | BEGIN_STATEMENT {writeMain(file);} {writeVariables(file);} Body END POINT { writeEndMain(file);closeOutputFile();}
         ;
 
     Body:
@@ -141,8 +139,9 @@
         | WriteFunctions Body
         | Aritmetic
         | Aritmetic Body
-
+        | ConditonalStatement Body
         ;
+
     WriteFunctions:
         WRITE LEFT_PARENTHESIS STRING RIGHT_PARENTHESIS SEMICOLON {
             writeSimplePrint(file, $3);
@@ -163,7 +162,7 @@
         | MINUS
         | DIVIDE
         | TIMES
-    ;
+        ;
 
     Aritmetic:
         IDENTIFIER ASSIGNMENT Number Operator Number SEMICOLON{
@@ -176,6 +175,17 @@
         | IDENTIFIER ASSIGNMENT LEFT_PARENTHESIS Number PLUS Number RIGHT_PARENTHESIS SEMICOLON{
           writeSimpleAritmeticParenthesis(file, $1, $4, $5, $6);
           }
+        ;
+
+    ConditionalStatement:
+        IfStatement
+        | IfStatement ElseStatement
+        ;
+    IfStatement:
+        IF LEFT_PARENTHESIS Condition RIGHT_PARENTHESIS THEN Body
+        ;
+    ElseStatement:
+        
 %%
 #include "lex.yy.c"
 int yyerror (void){

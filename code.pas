@@ -2,6 +2,7 @@ program teste;
 
 var
   variavel_teste, teste, asdasm, dasdas, asudhsauhd: real;
+  variavel_teste, teste, asdasm, dasdas, asudhsauhd: integer;
 
 begin
   writeln('teste');

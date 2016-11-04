@@ -4,9 +4,10 @@
 
 typedef struct ListVariable_{
     char *name;
+    char *type;
     struct ListVariable_ *next;
 }ListVariable;
-
+char *type;
 ListVariable *rootVariable = NULL;
 
 void insertVariableOnList(const char* name){
@@ -84,9 +85,9 @@ void printListVariables(FILE *file){
     writeIntoFile(file, ";\n\t");
 }
 
-void writeVariables(FILE *file, const char *type){
+void writeVariables(FILE *file){
     char print[20] = "";
-    strcat(print, type);
+    strcat(print, rootVariable->type);
     strcat(print, " ");
     writeIntoFile(file, print);
     printListVariables(file);
