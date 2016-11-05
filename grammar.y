@@ -7,6 +7,7 @@
     #include "lib/node.c"
 
     extern int lineCounter;
+    int tabulationCounter = 0; //variable to count how many tabulations we need to do to correct print on file
     FILE *file = NULL;
 
     void openOutputFile(char *algorithm_name) {
@@ -105,7 +106,7 @@
         ;
 
     HeaderAlgorithm:
-        PROGRAM IDENTIFIER  SEMICOLON {
+        PROGRAM IDENTIFIER SEMICOLON {
             openOutputFile($2);
             writeLibrary(file);
         }
@@ -139,7 +140,8 @@
         | WriteFunctions Body
         | Aritmetic
         | Aritmetic Body
-        | ConditonalStatement Body
+        | ConditionalStatement
+        | ConditionalStatement Body
         ;
 
     WriteFunctions:
@@ -180,12 +182,21 @@
     ConditionalStatement:
         IfStatement
         | IfStatement ElseStatement
+        | ELSE
         ;
+
     IfStatement:
         IF LEFT_PARENTHESIS Condition RIGHT_PARENTHESIS THEN Body
         ;
+
     ElseStatement:
-        
+        ELSE ConditionalStatement
+        ;
+
+    Condition:
+        IDENTIFIER SMALLER NATURAL_NUMBER
+        ;
+
 %%
 #include "lex.yy.c"
 int yyerror (void){

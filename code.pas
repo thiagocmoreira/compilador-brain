@@ -7,4 +7,8 @@ var
 begin
   writeln('teste');
   variavel_teste := (5 + 5);
+  if(teste < 0) then
+    writeln('teste');
+  else
+    writeln('teste');
 end.
