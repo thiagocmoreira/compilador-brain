@@ -73,3 +73,21 @@ void writeSimpleAritmeticParenthesis(FILE *file, char *name, char *number1, char
     strcat(print, ";\n");
     writeIntoFile(file, print);
 }
+
+void writeForStructure(FILE *file, const char *variable, const char *number1,const char *number2){
+    char print[300] = "";
+    strcat(print, "\n\t");
+    strcat(print, "for( ");
+    strcat(print, variable);
+    strcat(print, " = ");
+    strcat(print, number1);
+    strcat(print, "; ");
+    strcat(print, variable);
+    strcat(print, " <= ");
+    strcat(print, number2);
+    strcat(print, "; ");
+    strcat(print, variable);
+    strcat(print, "++ )");
+    strcat(print, ";\n");
+    writeIntoFile(file, print);
+}

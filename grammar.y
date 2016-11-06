@@ -36,7 +36,7 @@
     %token <strval> CHAR_TYPE
     %token CONST
     %token DIV
-    %token DO
+    %token <strval> DO
     %token ELSE
     %token END
     %token EOL
@@ -52,7 +52,7 @@
     %token PROCEDURE
     %token PROGRAM
     %token THEN
-    %token TO
+    %token <strval> TO
     %token TYPE
     %token TRUE
     %token UNTIL
@@ -88,6 +88,7 @@
     %type <strval> Number
     %type <strval> Operator
     %type <strval> Aritmetic
+    %type <strval> LoopStatement
 
     %start ProgramBegining
 
@@ -136,7 +137,8 @@
         | WriteFunctions Body
         | Aritmetic
         | Aritmetic Body
-
+        | LoopStatement
+        | LoopStatement Body
         ;
     WriteFunctions:
         WRITE LEFT_PARENTHESIS STRING RIGHT_PARENTHESIS SEMICOLON {
@@ -171,6 +173,16 @@
         | IDENTIFIER ASSIGNMENT LEFT_PARENTHESIS Number PLUS Number RIGHT_PARENTHESIS SEMICOLON{
           writeSimpleAritmeticParenthesis(file, $1, $4, $5, $6);
           }
+    ;
+
+    LoopStatement:
+        FOR IDENTIFIER ASSIGNMENT NATURAL_NUMBER TO NATURAL_NUMBER DO{
+          printf("FOR:\n");
+          printf("variavel: %s\n", $2);
+          printf("numero1: %s\n", $4);
+          printf(": %s\n", $6);
+          writeForStructure(file, $2, $4, $6);
+        }
 %%
 #include "lex.yy.c"
 int yyerror (void){
