@@ -69,6 +69,7 @@ writeln                             {return WRITELN;}
 [0-9]+\.[0-9]+("E"[0-9]+)?          {yylval.strval = strdup(yytext); return REAL_NUMBER;}
 
 "."                                 {return POINT;}
+","                                 {return VIRGULA;}
 "^"                                 {return POWER;}
 ";"                                 {return SEMICOLON;}
 "("                                 {return LEFT_PARENTHESIS;}

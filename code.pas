@@ -1,7 +1,8 @@
 program teste;
 
 var
-  variavel_teste : real;
+  variavel_teste, teste, asdasm, dasdas, asudhsauhd: real;
+  variavel_teste, teste, asdasm, dasdas, asudhsauhd: integer;
 
 begin
   writeln('teste');
@@ -12,4 +13,9 @@ begin
       writeln('teste');
     end;
 
+  if(teste < 0) then
+    writeln('teste');
+  else
+    writeln('teste');
+    
 end.

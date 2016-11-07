@@ -7,7 +7,9 @@
     #include "lib/node.c"
 
     extern int lineCounter;
+    int tabulationCounter = 0; //variable to count how many tabulations we need to do to correct print on file
     FILE *file = NULL;
+
     void openOutputFile(char *algorithm_name) {
         if (!file) {
             char file_name[60];
@@ -67,6 +69,7 @@
     %token <strval> NATURAL_NUMBER
     %token <strval> REAL_NUMBER
     %token POINT
+    %token VIRGULA
     %token POWER
     %token SEMICOLON
     %token LEFT_PARENTHESIS
@@ -84,6 +87,7 @@
     %token BIGGER
     %token BIGGER_EQUAL
 
+    %type <strval> Variables
     %type <strval> Type
     %type <strval> Number
     %type <strval> Operator
@@ -103,7 +107,7 @@
         ;
 
     HeaderAlgorithm:
-        PROGRAM IDENTIFIER  SEMICOLON {
+        PROGRAM IDENTIFIER SEMICOLON {
             openOutputFile($2);
             writeLibrary(file);
         }
@@ -114,22 +118,22 @@
         | VAR Variables
         ;
 
-    Variables:
-        IDENTIFIER COLON Type SEMICOLON {
-          printf("%s\n", $3);
-          writeSimpleVariable(file, $1, $3);
-        }
-        ;
-
     Type:
         INTEGER_TYPE
         | CHAR_TYPE
         | REAL_TYPE
         ;
 
+    Variables:
+        IDENTIFIER VIRGULA {insertVariableOnList($1);} Variables
+        | IDENTIFIER {insertVariableOnList($1);} COLON Type {rootVariable->type = $4;} SEMICOLON Variables
+        |
+        ;
+
+
     FirstBegin:
         BEGIN_STATEMENT {writeMain(file);} END POINT { writeEndMain(file);closeOutputFile();}
-        | BEGIN_STATEMENT {writeMain(file);} Body END POINT { writeEndMain(file);closeOutputFile();}
+        | BEGIN_STATEMENT {writeMain(file);} {writeVariables(file);} Body END POINT { writeEndMain(file);closeOutputFile();}
         ;
 
     Body:
@@ -139,7 +143,10 @@
         | Aritmetic Body
         | LoopStatement
         | LoopStatement Body
+        | ConditionalStatement
+        | ConditionalStatement Body
         ;
+
     WriteFunctions:
         WRITE LEFT_PARENTHESIS STRING RIGHT_PARENTHESIS SEMICOLON {
             writeSimplePrint(file, $3);
@@ -160,7 +167,7 @@
         | MINUS
         | DIVIDE
         | TIMES
-    ;
+        ;
 
     Aritmetic:
         IDENTIFIER ASSIGNMENT Number Operator Number SEMICOLON{
@@ -183,6 +190,26 @@
           printf("numero1: %s\n", $4);
           printf(": %s\n", $6);
         }
+        ;
+
+    ConditionalStatement:
+        IfStatement
+        | IfStatement ElseStatement
+        | ELSE
+        ;
+
+    IfStatement:
+        IF LEFT_PARENTHESIS Condition RIGHT_PARENTHESIS THEN Body
+        ;
+
+    ElseStatement:
+        ELSE ConditionalStatement
+        ;
+
+    Condition:
+        IDENTIFIER SMALLER NATURAL_NUMBER
+        ;
+
 %%
 #include "lex.yy.c"
 int yyerror (void){
