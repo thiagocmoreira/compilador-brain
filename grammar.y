@@ -176,12 +176,12 @@
     ;
 
     LoopStatement:
-        FOR IDENTIFIER ASSIGNMENT NATURAL_NUMBER TO NATURAL_NUMBER DO{
+        FOR IDENTIFIER ASSIGNMENT NATURAL_NUMBER TO NATURAL_NUMBER DO {writeForStructure(file, $2, $4, $6);}
+        BEGIN_STATEMENT Body END SEMICOLON {writeIntoFile(file, "\n\t}");}{
           printf("FOR:\n");
           printf("variavel: %s\n", $2);
           printf("numero1: %s\n", $4);
           printf(": %s\n", $6);
-          writeForStructure(file, $2, $4, $6);
         }
 %%
 #include "lex.yy.c"

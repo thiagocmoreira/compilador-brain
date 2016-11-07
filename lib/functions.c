@@ -87,7 +87,7 @@ void writeForStructure(FILE *file, const char *variable, const char *number1,con
     strcat(print, number2);
     strcat(print, "; ");
     strcat(print, variable);
-    strcat(print, "++ )");
-    strcat(print, ";\n");
+    strcat(print, "++ ) {");
+    strcat(print, "\n");
     writeIntoFile(file, print);
 }
