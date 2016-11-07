@@ -123,7 +123,7 @@ void writeSimpleAritmeticParenthesis(FILE *file, char *name, char *number1, char
     writeIntoFile(file, print);
 }
 
-void writeForStructure(FILE *file, const char *variable, const char *number1,const char *number2){
+void writeForStructure(FILE *file, const char *variable, const char *number1, const char *number2){
     char print[300] = "";
     strcat(print, "\n\t");
     strcat(print, "for( ");
@@ -137,6 +137,20 @@ void writeForStructure(FILE *file, const char *variable, const char *number1,con
     strcat(print, "; ");
     strcat(print, variable);
     strcat(print, "++ ) {");
+    strcat(print, "\n");
+    writeIntoFile(file, print);
+}
+
+void writeWhileStructure(FILE *file, const char *variable, const char *comparator, const char *number){
+    char print[300] = "";
+    strcat(print, "\n\t");
+    strcat(print, "while( ");
+    strcat(print, variable);
+    strcat(print, " ");
+    strcat(print, comparator);
+    strcat(print, " ");
+    strcat(print, number);
+    strcat(print, " ) {");
     strcat(print, "\n");
     writeIntoFile(file, print);
 }

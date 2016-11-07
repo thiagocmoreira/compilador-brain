@@ -1,21 +1,27 @@
 program teste;
 
 var
-  variavel_teste, teste, asdasm, dasdas, asudhsauhd: real;
-  variavel_teste, teste, asdasm, dasdas, asudhsauhd: integer;
+  variavel_teste, teste_condicao, teste_while, contador: integer;
 
 begin
-  writeln('teste');
+
+  write('teste write');
   variavel_teste := (5 + 5);
 
-  for CONT:=1 to 10 do
+  for contador:=1 to 10 do
     begin
-      writeln('teste');
+      writeln('teste for');
     end;
 
-  if(teste < 0) then
-    writeln('teste');
+  while teste_while >= 50 do
+    begin
+      writeln('teste while');
+    end;
+
+  if(teste_condicao <= 0)
+  then
+    writeln('teste if');
   else
-    writeln('teste');
-    
+    writeln('teste else');
+
 end.

@@ -9,7 +9,6 @@
     extern int lineCounter;
     int tabulationCounter = 0; //variable to count how many tabulations we need to do to correct print on file
     FILE *file = NULL;
-
     void openOutputFile(char *algorithm_name) {
         if (!file) {
             char file_name[60];
@@ -31,6 +30,7 @@
     char* strval;
 }
 //token declarations
+    %token <strval> COMPARATORS
     %token RESERVEDS_WORDS
     %token AND
     %token BEGIN_STATEMENT
@@ -80,18 +80,13 @@
     %token <strval> MINUS
     %token <strval> TIMES
     %token <strval> DIVIDE
-    %token <strval> EQUAL
-    %token DIFFERENT
-    %token SMALLER
-    %token SMALLER_EQUAL
-    %token BIGGER
-    %token BIGGER_EQUAL
 
     %type <strval> Variables
     %type <strval> Type
     %type <strval> Number
     %type <strval> Operator
     %type <strval> Aritmetic
+    %type <strvaL> Comparator
     %type <strval> LoopStatement
 
     %start ProgramBegining
@@ -180,16 +175,18 @@
         | IDENTIFIER ASSIGNMENT LEFT_PARENTHESIS Number PLUS Number RIGHT_PARENTHESIS SEMICOLON{
           writeSimpleAritmeticParenthesis(file, $1, $4, $5, $6);
           }
-    ;
+        ;
 
     LoopStatement:
         FOR IDENTIFIER ASSIGNMENT NATURAL_NUMBER TO NATURAL_NUMBER DO {writeForStructure(file, $2, $4, $6);}
-        BEGIN_STATEMENT Body END SEMICOLON {writeIntoFile(file, "\n\t}");}{
+        BEGIN_STATEMENT Body END SEMICOLON {writeIntoFile(file, "\n\t}\n");}{
           printf("FOR:\n");
           printf("variavel: %s\n", $2);
           printf("numero1: %s\n", $4);
-          printf(": %s\n", $6);
+          printf("numero2: %s\n", $6);
         }
+        | WHILE IDENTIFIER COMPARATORS Number DO {writeWhileStructure(file, $2, $3, $4);}
+          BEGIN_STATEMENT Body END SEMICOLON {writeIntoFile(file, "\n\t}\n");}
         ;
 
     ConditionalStatement:
@@ -207,7 +204,7 @@
         ;
 
     Condition:
-        IDENTIFIER SMALLER NATURAL_NUMBER
+        IDENTIFIER COMPARATORS Number
         ;
 
 %%

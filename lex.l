@@ -18,6 +18,8 @@ letter ({letter_min}|{letter_mai})
 
 variable {letter}({integer}|{letter}|"_")*
 
+comparators ("="|"<"|">"|"<="|">="|"<>")
+
 %%
 all_reserved                        {return RESERVEDS_WORDS;}
 and                                 {return AND;}
@@ -48,7 +50,7 @@ write                               {return WRITE;}
 writeln                             {return WRITELN;}
 
 "char"                              { yylval.strval = strdup(yytext); return(CHAR_TYPE); }
-"integer"                           {yylval.strval = "int"; return(INTEGER_TYPE); }
+"integer"                           { yylval.strval = "int"; return(INTEGER_TYPE); }
 "real"                              { yylval.strval = "float"; return(REAL_TYPE); }
 
 
@@ -80,15 +82,9 @@ writeln                             {return WRITELN;}
 "-"                                 { yylval.strval = strdup(yytext); return MINUS; }
 "*"                                 { yylval.strval = strdup(yytext); return TIMES; }
 "/"                                 { yylval.strval = strdup(yytext); return DIVIDE; }
-"="                                 {return EQUAL;}
-"#"                                 {return DIFFERENT;}
-"<"                                 {return SMALLER;}
-"<="                                {return SMALLER_EQUAL;}
-">"                                 {return BIGGER;}
-">="                                {return BIGGER_EQUAL;}
-"\n"                                {return EOL;}
+"\n"                                { return EOL; }
 
 {variable}                          { yylval.strval = strdup(yytext); return(NAME_VARIABLE); }
-
+{comparators}                       { yylval.strval = strdup(yytext); return(COMPARATORS); }
 
 %%
