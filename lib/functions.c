@@ -43,7 +43,7 @@ void writeMain(FILE *file){
     writeIntoFile(file, "int main(int argc, char **argv){\n");
 }
 void writeEndMain(FILE *file){
-    writeIntoFile(file, "\n\treturn 0;\n}\n");
+    writeIntoFile(file, "\n\n\treturn 0;\n}\n");
 }
 
 void writeSimplePrint(FILE *file, const char *string){
@@ -87,6 +87,7 @@ void printListVariables(FILE *file){
 
 void writeVariables(FILE *file){
     char print[20] = "";
+    strcat(print, "\n\t");
     strcat(print, rootVariable->type);
     strcat(print, " ");
     writeIntoFile(file, print);
@@ -136,8 +137,7 @@ void writeForStructure(FILE *file, const char *variable, const char *number1, co
     strcat(print, number2);
     strcat(print, "; ");
     strcat(print, variable);
-    strcat(print, "++ ) {");
-    strcat(print, "\n");
+    strcat(print, "++ ){");
     writeIntoFile(file, print);
 }
 
@@ -150,7 +150,31 @@ void writeWhileStructure(FILE *file, const char *variable, const char *comparato
     strcat(print, comparator);
     strcat(print, " ");
     strcat(print, number);
-    strcat(print, " ) {");
-    strcat(print, "\n");
+    strcat(print, " ){");
+    writeIntoFile(file, print);
+}
+
+void writeDoWhileStructure(FILE *file, const char *variable, const char *comparator, const char *number){
+    char print[300] = "";
+    strcat(print, "\n\t");
+    strcat(print, "}while( ");
+    strcat(print, variable);
+    strcat(print, " ");
+    strcat(print, comparator);
+    strcat(print, " ");
+    strcat(print, number);
+    strcat(print, " );");
+    writeIntoFile(file, print);
+}
+
+void writeCondition(FILE *file, const char *identifier1, const char *comparator, const char *identifier2){
+    char print[100] = "";
+    strcat(print, " ");
+    strcat(print, identifier1);
+    strcat(print, " ");
+    strcat(print, comparator);
+    strcat(print, " ");
+    strcat(print, identifier2);
+    strcat(print, " ");
     writeIntoFile(file, print);
 }

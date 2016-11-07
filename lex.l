@@ -39,6 +39,7 @@ not                                 {return NOT;}
 or                                  {return OR;}
 procedure                           {return PROCEDURE;}
 program                             {return PROGRAM;}
+repeat                              {return REPEAT;}
 then                                {return THEN;}
 to                                  {return TO;}
 type                                {return TYPE;}

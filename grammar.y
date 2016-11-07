@@ -53,6 +53,7 @@
     %token OR
     %token PROCEDURE
     %token PROGRAM
+    %token <strval> REPEAT
     %token THEN
     %token <strval> TO
     %token TYPE
@@ -187,16 +188,19 @@
         }
         | WHILE IDENTIFIER COMPARATORS Number DO {writeWhileStructure(file, $2, $3, $4);}
           BEGIN_STATEMENT Body END SEMICOLON {writeIntoFile(file, "\n\t}\n");}
+        | REPEAT {writeIntoFile(file, "\n\n\tdo{\t\t");} Body UNTIL IDENTIFIER
+        COMPARATORS Number SEMICOLON {writeDoWhileStructure(file, $5, $6, $7);}
         ;
 
     ConditionalStatement:
         IfStatement
         | IfStatement ElseStatement
-        | ELSE
+        | ELSE {writeIntoFile(file, "\n\t}else{" );}
         ;
 
     IfStatement:
-        IF LEFT_PARENTHESIS Condition RIGHT_PARENTHESIS THEN Body
+        IF LEFT_PARENTHESIS {writeIntoFile(file, "\n\tif(" );} Condition
+        RIGHT_PARENTHESIS {writeIntoFile(file, "){" );} THEN Body {writeIntoFile(file, "\n\t}" );}
         ;
 
     ElseStatement:
@@ -204,7 +208,8 @@
         ;
 
     Condition:
-        IDENTIFIER COMPARATORS Number
+        IDENTIFIER COMPARATORS Number {writeCondition(file, $1, $2, $3);}
+        | IDENTIFIER COMPARATORS IDENTIFIER {writeCondition(file, $1, $2, $3);}
         ;
 
 %%

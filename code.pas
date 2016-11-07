@@ -1,7 +1,7 @@
 program teste;
 
 var
-  variavel_teste, teste_condicao, teste_while, contador: integer;
+  variavel_teste, teste_condicao, teste_repeat, teste_while, contador: integer;
 
 begin
 
@@ -18,10 +18,13 @@ begin
       writeln('teste while');
     end;
 
-  if(teste_condicao <= 0)
-  then
+  if(teste_condicao <= 0) then
     writeln('teste if');
   else
     writeln('teste else');
+
+  repeat
+    writeln('teste repeat');
+  until teste_repeat<9;
 
 end.
