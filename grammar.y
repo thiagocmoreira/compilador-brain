@@ -4,10 +4,14 @@
     #include <string.h>
     #include "lib/functions.c"
     #include "global.h"
-    #include "lib/node.c"
+    //#include "lib/symbolTable.c"
 
     extern int lineCounter;
     int tabulationCounter = 0; //variable to count how many tabulations we need to do to correct print on file
+
+    //SymbolTable *symbolTable = newSymbol();
+    //Node *node = NULL;
+
     FILE *file = NULL;
     void openOutputFile(char *algorithm_name) {
         if (!file) {
@@ -63,6 +67,8 @@
     %token WHILE
     %token WRITE
     %token WRITELN
+    %token READ
+    %token READLN
     %token <strval> REAL_TYPE
     %token SIMPLE_WORD
     %token <strval> IDENTIFIER
@@ -114,18 +120,23 @@
         | VAR Variables
         ;
 
-    Type:
-        INTEGER_TYPE
-        | CHAR_TYPE
-        | REAL_TYPE
-        ;
 
     Variables:
         IDENTIFIER VIRGULA {insertVariableOnList($1);} Variables
-        | IDENTIFIER {insertVariableOnList($1);} COLON Type {rootVariable->type = $4;} SEMICOLON Variables
+        | IDENTIFIER {insertVariableOnList($1);} COLON Type {
+            rootVariable->type = $4;
+            //insertArrayVariableOnNode();
+            //freeList();
+        }
+        SEMICOLON Variables
         |
         ;
 
+    Type:
+    INTEGER_TYPE
+    | CHAR_TYPE
+    | REAL_TYPE
+    ;
 
     FirstBegin:
         BEGIN_STATEMENT {writeMain(file);} END POINT { writeEndMain(file);closeOutputFile();}
@@ -135,6 +146,8 @@
     Body:
         WriteFunctions
         | WriteFunctions Body
+        | ReadFunctions
+        | ReadFunctions Body
         | Aritmetic
         | Aritmetic Body
         | LoopStatement
@@ -151,6 +164,16 @@
         WRITELN LEFT_PARENTHESIS STRING RIGHT_PARENTHESIS SEMICOLON {
             writePrintLN(file, $3);
         }
+        ;
+
+    ReadFunctions:
+        READ {writeIntoFile(file, "scanf(");} LEFT_PARENTHESIS ReadPossibilities RIGHT_PARENTHESIS SEMICOLON
+        | READLN LEFT_PARENTHESIS ReadPossibilities RIGHT_PARENTHESIS SEMICOLON
+        ;
+
+    ReadPossibilities:
+        IDENTIFIER 
+        | IDENTIFIER VIRGULA ReadPossibilities
         ;
 
     Number:

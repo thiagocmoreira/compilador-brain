@@ -1,7 +1,8 @@
 #include "symbolTable.h"
+#include "node.c"
 #include <stdio.h>
 
-SymbolTable *new(void) {
+SymbolTable *newSymbol(void) {
     SymbolTable* symbolTable = (SymbolTable*) malloc(sizeof(SymbolTable));
 
     symbolTable->root = NULL;
@@ -9,14 +10,23 @@ SymbolTable *new(void) {
 
     return symbolTable;
 }
+/*
+void insertVariableOnTable(SymbolTable *symbolTable, Node *node){
 
-SymbolTable *addSymbol(Variable *variable){
-    
+    if(symbolTable == NULL){
+        symbolTable = newSymbol();
+        symbolTable->root = node;
+    }else{
+        if(symbolTable->root->variable == NULL){
+            symbolTable->root =  node;
+        }else{
+            if(symbolTable->root->variable < variable){
+                insertVariableOnTable(symbolTable->root->left, variable);
+            }else{
+                insertVariableOnTable(symbolTable->root->right, variable);
+            }
+        }
+    }
+
 }
-
-
-void insertSymbolElement(SymbolTable *element, Variable *variable){
-
-
-
-}
+*/

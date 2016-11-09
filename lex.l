@@ -39,6 +39,8 @@ not                                 {return NOT;}
 or                                  {return OR;}
 procedure                           {return PROCEDURE;}
 program                             {return PROGRAM;}
+read                                {return READ;}
+readln                              {return READLN;}
 repeat                              {return REPEAT;}
 then                                {return THEN;}
 to                                  {return TO;}

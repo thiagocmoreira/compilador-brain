@@ -2,6 +2,7 @@ typedef struct VariableStruct{
 
     char *name;
     char *type;
+    unsigned int line;
 
 }Variable;
 

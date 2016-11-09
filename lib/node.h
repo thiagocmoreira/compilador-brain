@@ -10,6 +10,8 @@ typedef struct NodeStruct {
 
 Node *newNode(Variable* variable);
 
+void insertVariableOnNode(Node *node, Variable *variable){
+
 void destroyNode(Node* node);
 
 unsigned int addVariableToNodeArray(Node* node, Variable* array, unsigned int index);

@@ -15,6 +15,19 @@ Node* newNode(Variable* variable) {
 
 }
 
+
+void insertVariableOnNode(Node *node, Variable *variable){
+    if(node == NULL){
+        node = newNode(variable);
+    }else{
+        if(node->variable->type < variable->type){
+            insertVariableOnNode(node->left, variable);
+        }else{
+            insertVariableOnNode(node->right, variable);
+        }
+    }
+}
+
 void destroyNode(Node* node) {
 
     if(node != NULL){

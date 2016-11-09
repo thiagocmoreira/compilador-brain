@@ -4,6 +4,8 @@ var
   variavel_teste, teste_condicao, teste_repeat, teste_while, contador: integer;
 
 begin
+  
+  read(variavel_teste);
 
   write('teste write');
   variavel_teste := (5 + 5);
