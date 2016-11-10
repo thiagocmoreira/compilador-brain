@@ -62,7 +62,7 @@ writeln                             {return WRITELN;}
 [ \t]+                              {/*nothing to do */}
 
 [a-zA-Z]                            {return SIMPLE_WORD;}
-{letter}({integer}|{letter}|"_")*   {printf("identifier: %s\n", yytext);yylval.strval = strdup(yytext);return IDENTIFIER;}
+{letter}({integer}|{letter}|"_")*   {yylval.strval = strdup(yytext);return IDENTIFIER;}
 "'"([^'])*"'"                       {
                                       yytext = yytext + 1;
                                       yytext[strlen(yytext)-1] = 0;

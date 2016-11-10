@@ -2,15 +2,14 @@
     #include <stdio.h>
     #include <stdlib.h>
     #include <string.h>
-    #include "lib/functions.c"
     #include "global.h"
-    //#include "lib/symbolTable.c"
+    #include "lib/symbolTable.c"
 
     extern int lineCounter;
     int tabulationCounter = 0; //variable to count how many tabulations we need to do to correct print on file
 
-    //SymbolTable *symbolTable = newSymbol();
-    //Node *node = NULL;
+    SymbolTable *symbolTable = NULL;
+    Node *node = NULL;
 
     FILE *file = NULL;
     void openOutputFile(char *algorithm_name) {
@@ -93,7 +92,6 @@
     %type <strval> Number
     %type <strval> Operator
     %type <strval> Aritmetic
-    %type <strvaL> Comparator
     %type <strval> LoopStatement
 
     %start ProgramBegining
@@ -125,11 +123,10 @@
         IDENTIFIER VIRGULA {insertVariableOnList($1);} Variables
         | IDENTIFIER {insertVariableOnList($1);} COLON Type {
             rootVariable->type = $4;
-            //insertArrayVariableOnNode();
-            //freeList();
-        }
-        SEMICOLON Variables
-        |
+            insertArrayVariableOnNode(rootVariable, rootVariable->type, node);
+            //freeList(rootVariable);
+        } SEMICOLON Variables
+        | /* do nothinh */
         ;
 
     Type:
@@ -172,7 +169,7 @@
         ;
 
     ReadPossibilities:
-        IDENTIFIER 
+        IDENTIFIER
         | IDENTIFIER VIRGULA ReadPossibilities
         ;
 
@@ -191,10 +188,6 @@
     Aritmetic:
         IDENTIFIER ASSIGNMENT Number Operator Number SEMICOLON{
           writeSimpleAritmetic(file, $1, $3, $4, $5);
-          printf("variavel: %s\n", $1);
-          printf("numero1: %s\n", $3);
-          printf("operador: %s\n", $4);
-          printf("numero2: %s\n", $5);
           }
         | IDENTIFIER ASSIGNMENT LEFT_PARENTHESIS Number PLUS Number RIGHT_PARENTHESIS SEMICOLON{
           writeSimpleAritmeticParenthesis(file, $1, $4, $5, $6);
@@ -203,12 +196,7 @@
 
     LoopStatement:
         FOR IDENTIFIER ASSIGNMENT NATURAL_NUMBER TO NATURAL_NUMBER DO {writeForStructure(file, $2, $4, $6);}
-        BEGIN_STATEMENT Body END SEMICOLON {writeIntoFile(file, "\n\t}\n");}{
-          printf("FOR:\n");
-          printf("variavel: %s\n", $2);
-          printf("numero1: %s\n", $4);
-          printf("numero2: %s\n", $6);
-        }
+        BEGIN_STATEMENT Body END SEMICOLON {writeIntoFile(file, "\n\t}\n");}
         | WHILE IDENTIFIER COMPARATORS Number DO {writeWhileStructure(file, $2, $3, $4);}
           BEGIN_STATEMENT Body END SEMICOLON {writeIntoFile(file, "\n\t}\n");}
         | REPEAT {writeIntoFile(file, "\n\n\tdo{\t\t");} Body UNTIL IDENTIFIER
@@ -243,7 +231,7 @@ int yyerror (void){
 
 //main function
 int main(void){
-
+    symbolTable = newSymbol();
     yyparse();
 
     return 0;

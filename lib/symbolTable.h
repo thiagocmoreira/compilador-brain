@@ -1,4 +1,4 @@
-#include "variable.h"
+#include "node.c"
 
 typedef struct Symbol_Table{
 

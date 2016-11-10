@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include "functions.c"
 #include "node.h"
 
 
@@ -28,6 +29,21 @@ void insertVariableOnNode(Node *node, Variable *variable){
     }
 }
 
+void insertArrayVariableOnNode(ListVariable *listVariable, char *type, Node *node){
+
+    ListVariable *aux = listVariable;
+
+    while(aux->next != NULL){
+        Variable *variable = (Variable*)malloc(sizeof(Variable));
+        variable->name = aux->name;
+        variable->type = type;
+        insertVariableOnNode(node, variable);
+        aux = aux->next;
+    }
+
+
+}
+
 void destroyNode(Node* node) {
 
     if(node != NULL){
@@ -40,25 +56,5 @@ void destroyNode(Node* node) {
         free(node);
         node = NULL;
     }
-
-}
-
-
-unsigned int addVariableToNodeArray(Node* node, Variable* array, unsigned int index) {
-
-    if(node != NULL){
-      if(node->left != NULL){
-          index = addVariableToNodeArray(node->left, array, index);
-      }
-
-      array[index] = *node->variable;
-      index += 1;
-
-      if(node->right != NULL){
-          index = addVariableToNodeArray(node->right, array, index);
-      }
-    }
-
-    return index;
 
 }
