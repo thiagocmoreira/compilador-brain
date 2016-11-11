@@ -32,7 +32,7 @@ void insertVariableOnList(char* name){
 void freeList(ListVariable *list){
 
     ListVariable *aux = list;
-
+    
     while((aux = list) != NULL){
         printf("%s\n", list->name);
         list = list->next;

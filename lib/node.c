@@ -17,19 +17,23 @@ Node* newNode(Variable* variable) {
 }
 
 
-void insertVariableOnNode(Node *node, Variable *variable){
+Node *insertVariableOnNode(Node *node, Variable *variable){
+    
     if(node == NULL){
         node = newNode(variable);
     }else{
+        int compare = (node->variable->type < variable->type);
+        printf("Compare: %d\n", compare);
         if(node->variable->type < variable->type){
-            insertVariableOnNode(node->left, variable);
+            node->left = insertVariableOnNode(node->left, variable);
         }else{
-            insertVariableOnNode(node->right, variable);
+            node->right = insertVariableOnNode(node->right, variable);
         }
     }
+    return node;
 }
 
-void insertArrayVariableOnNode(ListVariable *listVariable, char *type, Node *node){
+Node *insertArrayVariableOnNode(ListVariable *listVariable, char *type, Node *node){
 
     ListVariable *aux = listVariable;
 
@@ -37,11 +41,43 @@ void insertArrayVariableOnNode(ListVariable *listVariable, char *type, Node *nod
         Variable *variable = (Variable*)malloc(sizeof(Variable));
         variable->name = aux->name;
         variable->type = type;
-        insertVariableOnNode(node, variable);
+        node = insertVariableOnNode(node, variable);
         aux = aux->next;
     }
+    return node;
 
+}
 
+unsigned int searchVariableOnNode(Node *node, char *name){
+
+    unsigned int variableFound = 0;
+
+    if(node != NULL){
+        printf("entrou no node\n");
+        if(node->variable->name == name){
+            variableFound = 1;
+            return variableFound;
+        }else{
+            variableFound = searchVariableOnNode(node->left, name);
+            variableFound = searchVariableOnNode(node->right, name);
+        }
+    }else{
+        printf("não entrou no node\n");
+
+        // nothing to do
+    }
+
+    return variableFound;
+
+}
+
+void showNode(Node *node){
+    if(node != NULL){
+        showNode(node->left);
+        printf("Node->variable->name: %s\n", node->variable->name);
+        printf("Node->variable->type: %s\n", node->variable->type);
+        showNode(node->right);
+    }
 }
 
 void destroyNode(Node* node) {

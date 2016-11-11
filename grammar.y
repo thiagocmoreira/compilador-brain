@@ -10,6 +10,7 @@
 
     SymbolTable *symbolTable = NULL;
     Node *node = NULL;
+    unsigned int variableExists = 0;
 
     FILE *file = NULL;
     void openOutputFile(char *algorithm_name) {
@@ -123,17 +124,21 @@
         IDENTIFIER VIRGULA {insertVariableOnList($1);} Variables
         | IDENTIFIER {insertVariableOnList($1);} COLON Type {
             rootVariable->type = $4;
-            insertArrayVariableOnNode(rootVariable, rootVariable->type, node);
+            node = insertArrayVariableOnNode(rootVariable, rootVariable->type, node);
+            showNode(node);
+            if(node == NULL){
+                printf("Node is empty\n");
+            }
             //freeList(rootVariable);
         } SEMICOLON Variables
-        | /* do nothinh */
+        | /* do nothing */
         ;
 
     Type:
-    INTEGER_TYPE
-    | CHAR_TYPE
-    | REAL_TYPE
-    ;
+        INTEGER_TYPE
+        | CHAR_TYPE
+        | REAL_TYPE
+        ;
 
     FirstBegin:
         BEGIN_STATEMENT {writeMain(file);} END POINT { writeEndMain(file);closeOutputFile();}
@@ -164,13 +169,31 @@
         ;
 
     ReadFunctions:
-        READ {writeIntoFile(file, "scanf(");} LEFT_PARENTHESIS ReadPossibilities RIGHT_PARENTHESIS SEMICOLON
+        READ {writeIntoFile(file, "scanf(\"");} LEFT_PARENTHESIS ReadPossibilities RIGHT_PARENTHESIS SEMICOLON {writeIntoFile(file, "\");\n");}
         | READLN LEFT_PARENTHESIS ReadPossibilities RIGHT_PARENTHESIS SEMICOLON
         ;
 
     ReadPossibilities:
-        IDENTIFIER
-        | IDENTIFIER VIRGULA ReadPossibilities
+        IDENTIFIER {
+            printf("Antes de entrar no node\n");
+            variableExists = searchVariableOnNode(node, $1);
+            if(!variableExists){
+                printf("Error: \'%s\' was not declarated on this scope.\n", $1);
+            }else{
+                // nothing to do
+                printf("%s\n", node->variable->name);
+            }
+
+        }
+        | IDENTIFIER {
+            variableExists = searchVariableOnNode(node, $1);
+            if(!variableExists){
+                printf("Error: \'%s\' was not declarated on this scope.\n", $1);
+            }else{
+                // nothing to do
+            }
+
+        } VIRGULA ReadPossibilities
         ;
 
     Number:

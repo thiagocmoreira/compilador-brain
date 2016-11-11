@@ -10,8 +10,10 @@ typedef struct NodeStruct {
 
 Node *newNode(Variable* variable);
 
-void insertVariableOnNode(Node *node, Variable *variable);
+Node *insertVariableOnNode(Node *node, Variable *variable);
 
-void insertArrayVariableOnNode(ListVariable *listVariable, char *type, Node *node);
+Node *insertArrayVariableOnNode(ListVariable *listVariable, char *type, Node *node);
+
+unsigned int searchVariableOnNode(Node *node, char *name);
 
 void destroyNode(Node* node);
