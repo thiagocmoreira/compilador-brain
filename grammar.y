@@ -87,6 +87,12 @@
     %token <strval> MINUS
     %token <strval> TIMES
     %token <strval> DIVIDE
+    %token <strval> DOUBLE_SLASH
+    %token <strval> OPENING_COMMENT
+    %token <strval> CLOSING_COMMENT
+    %token <strval> OPENING_BRACE
+    %token <strval> CLOSING_BRACE
+    %token <strval> STRING_TYPE
 
     %type <strval> Variables
     %type <strval> Type
@@ -94,6 +100,8 @@
     %type <strval> Operator
     %type <strval> Aritmetic
     %type <strval> LoopStatement
+    %type <strval> StringValue
+    %type <strval> Comment
 
     %start ProgramBegining
 
@@ -159,6 +167,7 @@
         | LoopStatement Body
         | ConditionalStatement
         | ConditionalStatement Body
+        | Comment Body
         ;
 
     WriteFunctions:
@@ -247,6 +256,16 @@
     Condition:
         IDENTIFIER COMPARATORS Number {writeCondition(file, $1, $2, $3);}
         | IDENTIFIER COMPARATORS IDENTIFIER {writeCondition(file, $1, $2, $3);}
+        ;
+    Comment:
+        OPENING_BRACE {writeIntoFile(file, " /* " );} StringValue {writeIntoFile(file, $1); writeIntoFile(file, " ");} CLOSING_BRACE {writeIntoFile(file, "*/\n" );}
+        | OPENING_COMMENT {writeIntoFile(file, " /* " );} StringValue CLOSING_COMMENT {writeIntoFile(file, "*/\n" );}
+        | DOUBLE_SLASH {writeIntoFile(file, "// " );} StringValue {writeIntoFile(file, "\n" );}
+        ;
+
+    StringValue:
+        IDENTIFIER {writeIntoFile(file, $1); writeIntoFile(file, " ");}
+        | IDENTIFIER StringValue
         ;
 
 %%

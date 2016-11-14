@@ -6,7 +6,8 @@ var
 
 begin
 
-  read(variavel_teste);
+  // FCOMP_2016_02
+  (* Compilador_Brain *)
 
   write('teste write');
   variavel_teste := (5 + 5);
