@@ -64,7 +64,7 @@ void writeSimpleVariable(FILE *file, const char *name, const char *type){
 void writeVariables(FILE *file){
     char print[20] = "";
     strcat(print, "\n\t");
-    strcat(print, rootVariable->type);
+    strcat(print, variableType);
     strcat(print, " ");
     writeIntoFile(file, print);
     printListVariables(file);

@@ -121,15 +121,18 @@
 
 
     Variables:
-        IDENTIFIER VIRGULA {insertVariableOnList($1);} Variables
-        | IDENTIFIER {insertVariableOnList($1);} COLON Type {
-            rootVariable->type = $4;
-            node = insertArrayVariableOnNode(rootVariable, rootVariable->type, node);
+        IDENTIFIER  { insertVariableOnList($1); } VIRGULA Variables
+        | IDENTIFIER { insertVariableOnList($1); } COLON Type {
+
+            variableType = $4;
+            showList(); //correct implementation
+            node = insertArrayVariableOnNode(rootVariable, $4, node);
             showNode(node);
             if(node == NULL){
                 printf("Node is empty\n");
             }
-            //freeList(rootVariable);
+            freeList(); //correct implementation
+
         } SEMICOLON Variables
         | /* do nothing */
         ;

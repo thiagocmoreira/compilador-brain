@@ -4,11 +4,27 @@
 
 typedef struct ListVariable_{
     char *name;
-    char *type;
     struct ListVariable_ *next;
 }ListVariable;
 
 ListVariable *rootVariable = NULL;
+char *variableType;
+
+ListVariable *includeOnTail(ListVariable *root, char *name){
+
+    ListVariable *aux, *new;
+
+    new = (ListVariable*)malloc(sizeof(ListVariable));
+    new->name = name;
+    new->next = NULL;
+    aux = root;
+    while(aux->next != NULL){
+        aux = aux->next;
+    }
+    aux->next = new;
+    return root;
+
+}
 
 void insertVariableOnList(char* name){
 
@@ -17,26 +33,31 @@ void insertVariableOnList(char* name){
         rootVariable->name = name;
         rootVariable->next = NULL;
     }else{
-        ListVariable *aux = rootVariable;
-        while(aux->next != NULL){
-            aux = aux->next;
-        }
-        aux->next = (ListVariable*)malloc(sizeof(ListVariable));
-        aux = aux->next;
-        aux->name = name;
-        aux->next = NULL;
+        rootVariable = includeOnTail(rootVariable, name);
     }
 
 }
 
-void freeList(ListVariable *list){
+void showList(){
 
-    ListVariable *aux = list;
-    
-    while((aux = list) != NULL){
-        printf("%s\n", list->name);
-        list = list->next;
+    ListVariable *aux;
+    aux = rootVariable;
+    while(aux != NULL){
+        printf("Nome da variável: %s\n", aux->name);
+        aux = aux->next;
+    }
+
+}
+
+void freeList(){
+
+    ListVariable *aux = rootVariable;
+
+    while((aux = rootVariable) != NULL){
+        printf("%s\n", rootVariable->name);
+        rootVariable = rootVariable->next;
         free(aux);
     }
+    rootVariable = NULL;
 
 }

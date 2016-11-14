@@ -18,13 +18,13 @@ Node* newNode(Variable* variable) {
 
 
 Node *insertVariableOnNode(Node *node, Variable *variable){
-    
+
     if(node == NULL){
         node = newNode(variable);
     }else{
-        int compare = (node->variable->type < variable->type);
+        int compare = strcmp(node->variable->type, variable->type);
         printf("Compare: %d\n", compare);
-        if(node->variable->type < variable->type){
+        if(compare == 0){
             node->left = insertVariableOnNode(node->left, variable);
         }else{
             node->right = insertVariableOnNode(node->right, variable);
@@ -37,12 +37,12 @@ Node *insertArrayVariableOnNode(ListVariable *listVariable, char *type, Node *no
 
     ListVariable *aux = listVariable;
 
-    while(aux->next != NULL){
+    while(aux != NULL){
         Variable *variable = (Variable*)malloc(sizeof(Variable));
         variable->name = aux->name;
         variable->type = type;
-        node = insertVariableOnNode(node, variable);
         aux = aux->next;
+        node = insertVariableOnNode(node, variable);
     }
     return node;
 
@@ -53,7 +53,6 @@ unsigned int searchVariableOnNode(Node *node, char *name){
     unsigned int variableFound = 0;
 
     if(node != NULL){
-        printf("entrou no node\n");
         if(node->variable->name == name){
             variableFound = 1;
             return variableFound;
@@ -62,8 +61,6 @@ unsigned int searchVariableOnNode(Node *node, char *name){
             variableFound = searchVariableOnNode(node->right, name);
         }
     }else{
-        printf("não entrou no node\n");
-
         // nothing to do
     }
 
@@ -77,6 +74,8 @@ void showNode(Node *node){
         printf("Node->variable->name: %s\n", node->variable->name);
         printf("Node->variable->type: %s\n", node->variable->type);
         showNode(node->right);
+    }else{
+        // nothing to do
     }
 }
 
