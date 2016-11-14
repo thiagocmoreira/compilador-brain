@@ -18,7 +18,7 @@ Node* newNode(Variable* variable) {
 
 
 Node *insertVariableOnNode(Node *node, Variable *variable){
-    
+
     if(node == NULL){
         node = newNode(variable);
     }else{

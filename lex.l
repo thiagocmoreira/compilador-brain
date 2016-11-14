@@ -51,6 +51,11 @@ var                                 {return VAR;}
 while                               {return WHILE;}
 write                               {return WRITE;}
 writeln                             {return WRITELN;}
+"(*"                                {return OPENING_COMMENT;}
+"*)"                                {return CLOSING_COMMENT;}
+"//"                                {return DOUBLE_SLASH;}
+"{"                                 {return OPENING_BRACE;}
+"}"                                 {return CLOSING_BRACE;}
 
 "char"                              { yylval.strval = strdup(yytext); return(CHAR_TYPE); }
 "integer"                           { yylval.strval = "int"; return(INTEGER_TYPE); }
@@ -69,6 +74,7 @@ writeln                             {return WRITELN;}
                                       yylval.strval = strdup(yytext);
                                       return STRING;
                                     }
+string_type                        {yylval.strval = strdup(yytext); return STRING_TYPE;}
 
 [0-9]+                              {yylval.strval = strdup(yytext); return NATURAL_NUMBER;}
 [0-9]+\.[0-9]+("E"[0-9]+)?          {yylval.strval = strdup(yytext); return REAL_NUMBER;}
