@@ -6,8 +6,9 @@ var
 
 begin
 
-  // FCOMP_2016_02
-  (* Compilador_Brain *)
+  // FUNDAMENTOS DE COMPILADORES
+  (* Compilador_Brain
+    DASDASDSA *)
 
   write('teste write');
   variavel_teste := (5 + 5);

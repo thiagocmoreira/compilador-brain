@@ -264,8 +264,10 @@
         ;
 
     StringValue:
-        IDENTIFIER {writeIntoFile(file, $1); writeIntoFile(file, " ");}
-        | IDENTIFIER StringValue
+
+        | IDENTIFIER {writeIntoFile(file, $1);} EOL StringValue
+        | IDENTIFIER {writeIntoFile(file, $1); writeIntoFile(file, " ");} StringValue
+        | IDENTIFIER {writeIntoFile(file, $1); writeIntoFile(file, " ");}
         ;
 
 %%
