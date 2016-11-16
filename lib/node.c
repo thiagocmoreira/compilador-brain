@@ -74,12 +74,41 @@ void showNode(Node *node){
     if(node != NULL){
         showNode(node->left);
         // printf("Node->variable->name: %s\n", node->variable->name);
+        char print[30] = "";
+        strcat(print, node->variable->name);
+        strcat(print, ", ");
         // printf("Node->variable->type: %s\n", node->variable->type);
         showNode(node->right);
     }else{
         // nothing to do
     }
 }
+
+void insertVariablesOnFile(FILE *file, Node *node, char *type){
+
+    if(node != NULL){
+        insertVariablesOnFile(file, node->left, type);
+        char print[40] = "";
+        strcat(print, "\n\t");
+        strcat(print, node->variable->type);
+        strcat(print, " ");
+        strcat(print, node->variable->name);
+        strcat(print, ";");
+        writeIntoFile(file, print);
+        insertVariablesOnFile(file, node->right, type);
+    }else{
+        // nothing to do
+    }
+
+}
+
+void writeVariablesOnFile(FILE *file, Node *node){
+
+    insertVariablesOnFile(file, node, node->variable->type);
+    writeIntoFile(file, "\n");
+
+}
+
 
 void destroyNode(Node* node) {
 

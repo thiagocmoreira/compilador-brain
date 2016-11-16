@@ -16,4 +16,8 @@ Node *insertArrayVariableOnNode(ListVariable *listVariable, char *type, Node *no
 
 unsigned int searchVariableOnNode(Node *node, char *name);
 
+void insertVariablesOnFile(FILE *file, Node *node, char *type);
+
+void writeVariablesOnFile(FILE *file, Node *node);
+
 void destroyNode(Node* node);
