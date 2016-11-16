@@ -54,7 +54,7 @@ void freeList(){
     ListVariable *aux = rootVariable;
 
     while((aux = rootVariable) != NULL){
-        printf("%s\n", rootVariable->name);
+        //printf("%s\n", rootVariable->name);
         rootVariable = rootVariable->next;
         free(aux);
     }

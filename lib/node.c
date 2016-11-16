@@ -23,7 +23,6 @@ Node *insertVariableOnNode(Node *node, Variable *variable){
         node = newNode(variable);
     }else{
         int compare = strcmp(node->variable->type, variable->type);
-        printf("Compare: %d\n", compare);
         if(compare == 0){
             node->left = insertVariableOnNode(node->left, variable);
         }else{
@@ -53,12 +52,15 @@ unsigned int searchVariableOnNode(Node *node, char *name){
     unsigned int variableFound = 0;
 
     if(node != NULL){
-        if(node->variable->name == name){
+        int compare = strcmp(node->variable->name, name);
+        if(!compare){
             variableFound = 1;
             return variableFound;
         }else{
             variableFound = searchVariableOnNode(node->left, name);
-            variableFound = searchVariableOnNode(node->right, name);
+            if(!variableFound){
+                variableFound = searchVariableOnNode(node->right, name);
+            }
         }
     }else{
         // nothing to do
@@ -71,8 +73,8 @@ unsigned int searchVariableOnNode(Node *node, char *name){
 void showNode(Node *node){
     if(node != NULL){
         showNode(node->left);
-        printf("Node->variable->name: %s\n", node->variable->name);
-        printf("Node->variable->type: %s\n", node->variable->type);
+        // printf("Node->variable->name: %s\n", node->variable->name);
+        // printf("Node->variable->type: %s\n", node->variable->type);
         showNode(node->right);
     }else{
         // nothing to do

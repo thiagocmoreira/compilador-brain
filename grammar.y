@@ -133,7 +133,8 @@
         | IDENTIFIER { insertVariableOnList($1); } COLON Type {
 
             variableType = $4;
-            showList(); //correct implementation
+            // showList(); //correct implementation
+            writeVariables(file);
             node = insertArrayVariableOnNode(rootVariable, $4, node);
             showNode(node);
             if(node == NULL){
@@ -187,13 +188,11 @@
 
     ReadPossibilities:
         IDENTIFIER {
-            printf("Antes de entrar no node\n");
             variableExists = searchVariableOnNode(node, $1);
             if(!variableExists){
                 printf("Error: \'%s\' was not declarated on this scope.\n", $1);
             }else{
                 // nothing to do
-                printf("%s\n", node->variable->name);
             }
 
         }

@@ -8,6 +8,7 @@ begin
 
   // FCOMP_2016_02
   (* Compilador_Brain *)
+  read(tefsfs, sfsd);
 
   write('teste write');
   variavel_teste := (5 + 5);
