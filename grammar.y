@@ -134,7 +134,7 @@
 
             variableType = $4;
             // showList(); //correct implementation
-            writeVariables(file);
+            //writeVariables(file);
             node = insertArrayVariableOnNode(rootVariable, $4, node);
             showNode(node);
             if(node == NULL){
@@ -154,7 +154,9 @@
 
     FirstBegin:
         BEGIN_STATEMENT {writeMain(file);} END POINT { writeEndMain(file);closeOutputFile();}
-        | BEGIN_STATEMENT {writeMain(file);} {writeVariables(file);} Body END POINT { writeEndMain(file);closeOutputFile();}
+        | BEGIN_STATEMENT {writeMain(file);} {
+            writeVariablesOnFile(file, node);
+        } Body END POINT { writeEndMain(file);closeOutputFile();}
         ;
 
     Body:
