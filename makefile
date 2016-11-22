@@ -11,3 +11,9 @@ file:
 	bison grammar.y -v
 	gcc -o program grammar.tab.c -ll
 	./program < code.pas
+
+test:
+	flex -i lex.l
+	bison grammar.y -v
+	gcc -o program grammar.tab.c -ll
+	./program < test.pas

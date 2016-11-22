@@ -155,7 +155,11 @@
     FirstBegin:
         BEGIN_STATEMENT {writeMain(file);} END POINT { writeEndMain(file);closeOutputFile();}
         | BEGIN_STATEMENT {writeMain(file);} {
-            writeVariablesOnFile(file, node);
+            if(node != NULL){
+                writeVariablesOnFile(file, node);
+            }else{
+                // nothing to do
+            }
         } Body END POINT { writeEndMain(file);closeOutputFile();}
         ;
 
@@ -169,7 +173,6 @@
         | LoopStatement
         | LoopStatement Body
         | ConditionalStatement
-        | ConditionalStatement Body
         | Comment Body
         ;
 
@@ -241,17 +244,17 @@
 
     ConditionalStatement:
         IfStatement
-        | IfStatement ElseStatement
-        | ELSE {writeIntoFile(file, "\n\t}else{" );}
+        | ElseStatement {printf("else depos\n"); }
+        | END SEMICOLON
         ;
 
     IfStatement:
         IF LEFT_PARENTHESIS {writeIntoFile(file, "\n\tif(" );} Condition
-        RIGHT_PARENTHESIS {writeIntoFile(file, "){" );} THEN Body {writeIntoFile(file, "\n\t}" );}
+        RIGHT_PARENTHESIS {writeIntoFile(file, "){" );} THEN Body {printf("depois body\n");}
         ;
 
     ElseStatement:
-        ELSE ConditionalStatement
+        ELSE IfStatement {printf("segundo if\n");}
         ;
 
     Condition:
