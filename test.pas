@@ -9,7 +9,6 @@ begin
     read(teste);
   else
     read(teste);
-
     read(teste);
     read(teste);
     read(teste);
@@ -17,6 +16,5 @@ begin
     read(teste);
     read(teste);
     read(teste);
-
 
 end.

@@ -256,13 +256,15 @@
 
     ConditionalEnd:
         ELSE  {printf("else statement\n"); } Body ConditionalEnd
-        | /* nothing */
+        | 
         ;
+
 
     Condition:
         IDENTIFIER COMPARATORS Number {writeCondition(file, $1, $2, $3);}
         | IDENTIFIER COMPARATORS IDENTIFIER {writeCondition(file, $1, $2, $3);}
         ;
+
     Comment:
         OPENING_BRACE {writeIntoFile(file, " /* " );} StringValue {writeIntoFile(file, $1); writeIntoFile(file, " ");} CLOSING_BRACE {writeIntoFile(file, "*/\n" );}
         | OPENING_COMMENT {writeIntoFile(file, " /* " );} StringValue CLOSING_COMMENT {writeIntoFile(file, "*/\n" );}
