@@ -180,11 +180,15 @@
 
     WriteFunctions:
         WRITE LEFT_PARENTHESIS STRING RIGHT_PARENTHESIS SEMICOLON {
-            writeSimplePrint(file, $3);
+            tabulationCounter++;
+            writeSimplePrint(file, $3, tabulationCounter);
+            tabulationCounter--;
         }
         |
         WRITELN LEFT_PARENTHESIS STRING RIGHT_PARENTHESIS SEMICOLON {
-            writePrintLN(file, $3);
+            tabulationCounter++;
+            writePrintLN(file, $3, tabulationCounter);
+            tabulationCounter--;
         }
         ;
 
@@ -228,20 +232,50 @@
 
     Aritmetic:
         IDENTIFIER ASSIGNMENT Number Operator Number SEMICOLON{
-          writeSimpleAritmetic(file, $1, $3, $4, $5);
-          }
+            tabulationCounter++;
+            writeSimpleAritmetic(file, $1, $3, $4, $5, tabulationCounter);
+            tabulationCounter--;
+        }
         | IDENTIFIER ASSIGNMENT LEFT_PARENTHESIS Number PLUS Number RIGHT_PARENTHESIS SEMICOLON{
-          writeSimpleAritmeticParenthesis(file, $1, $4, $5, $6);
+            tabulationCounter++;
+            writeSimpleAritmeticParenthesis(file, $1, $4, $5, $6, tabulationCounter);
+            tabulationCounter--;
           }
         ;
 
     LoopStatement:
-        FOR IDENTIFIER ASSIGNMENT NATURAL_NUMBER TO NATURAL_NUMBER DO {writeForStructure(file, $2, $4, $6);}
-        BEGIN_STATEMENT Body END SEMICOLON {writeIntoFile(file, "\n\t}\n");}
-        | WHILE IDENTIFIER COMPARATORS Number DO {writeWhileStructure(file, $2, $3, $4);}
-          BEGIN_STATEMENT Body END SEMICOLON {writeIntoFile(file, "\n\t}\n");}
-        | REPEAT {writeIntoFile(file, "\n\n\tdo{\t\t");} Body UNTIL IDENTIFIER
-        COMPARATORS Number SEMICOLON {writeDoWhileStructure(file, $5, $6, $7);}
+        FOR IDENTIFIER ASSIGNMENT NATURAL_NUMBER TO NATURAL_NUMBER DO {
+            tabulationCounter++;
+            writeForStructure(file, $2, $4, $6, tabulationCounter);
+            tabulationCounter--;
+        }
+        BEGIN_STATEMENT {tabulationCounter++; writeTabulation(file, tabulationCounter); tabulationCounter--;} Body END SEMICOLON {
+            tabulationCounter++;
+            writeTabulation(file, tabulationCounter);
+            writeIntoFile(file, "}");
+            writeLineBreak(file, 2);
+            tabulationCounter--;
+        }
+        | WHILE IDENTIFIER COMPARATORS Number DO {
+            tabulationCounter++;
+            writeWhileStructure(file, $2, $3, $4, tabulationCounter);
+            tabulationCounter--;
+        }
+        BEGIN_STATEMENT {tabulationCounter++; writeTabulation(file, tabulationCounter); tabulationCounter--;} Body END SEMICOLON {
+            tabulationCounter++;
+            writeTabulation(file, tabulationCounter);
+            writeIntoFile(file, "}");
+            writeLineBreak(file, 1);
+            tabulationCounter--;
+        }
+        | REPEAT {
+            tabulationCounter++;
+            writeTabulation(file, tabulationCounter);
+            writeIntoFile(file, "do{\n");
+        } Body UNTIL IDENTIFIER COMPARATORS Number SEMICOLON {
+            writeDoWhileStructure(file, $5, $6, $7, tabulationCounter);
+            tabulationCounter--;
+        }
         ;
 
     ConditionalStatement:
@@ -256,7 +290,7 @@
 
     ConditionalEnd:
         ELSE  {printf("else statement\n"); } Body ConditionalEnd
-        | 
+        |
         ;
 
 
@@ -266,13 +300,15 @@
         ;
 
     Comment:
-        OPENING_BRACE {writeIntoFile(file, " /* " );} StringValue {writeIntoFile(file, $1); writeIntoFile(file, " ");} CLOSING_BRACE {writeIntoFile(file, "*/\n" );}
-        | OPENING_COMMENT {writeIntoFile(file, " /* " );} StringValue CLOSING_COMMENT {writeIntoFile(file, "*/\n" );}
-        | DOUBLE_SLASH {writeIntoFile(file, "// " );} StringValue {writeIntoFile(file, "\n" );}
+        OPENING_BRACE {writeIntoFile(file, "\n"); tabulationCounter++; writeTabulation(file, tabulationCounter); tabulationCounter--; writeIntoFile(file, "/* " ); }
+        StringValue {writeIntoFile(file, $1); writeIntoFile(file, " ");} CLOSING_BRACE {writeIntoFile(file, "*/\n" );}
+        | OPENING_COMMENT {writeIntoFile(file, "\n"); tabulationCounter++; writeTabulation(file, tabulationCounter); tabulationCounter--; writeIntoFile(file, "/* " );}
+        StringValue CLOSING_COMMENT {writeIntoFile(file, "*/\n" );}
+        | DOUBLE_SLASH {writeIntoFile(file, "\n"); tabulationCounter++; writeTabulation(file, tabulationCounter); tabulationCounter--; writeIntoFile(file, "// " );}
+        StringValue {writeIntoFile(file, "\n" );}
         ;
 
     StringValue:
-
         | IDENTIFIER {writeIntoFile(file, $1);} EOL StringValue
         | IDENTIFIER {writeIntoFile(file, $1); writeIntoFile(file, " ");} StringValue
         | IDENTIFIER {writeIntoFile(file, $1); writeIntoFile(file, " ");}

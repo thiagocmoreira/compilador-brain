@@ -6,15 +6,20 @@ var
 
 begin
 
-  // FUNDAMENTOS DE COMPILADORES
-  (* Compilador_Brain
-    DASDASDSA *)
-  // FCOMP_2016_02
-  (* Compilador_Brain *)
   read(tefsfs, sfsd);
 
+  // Comandos de saida
   write('teste write');
+  writeln('teste write');
+
+  (* Atribuicao aritmetica *)
   variavel_teste := (5 + 5);
+  variavel_teste := 10.5 + 12.9;
+
+  // Estruturas de repeticao
+  repeat
+    writeln('teste repeat');
+  until teste_repeat < 9;
 
   for contador:=1 to 10 do
     begin
@@ -26,13 +31,10 @@ begin
       writeln('teste while');
     end;
 
+  (* Estrutura de condicao *)
   if(teste_condicao <= 0) then
     writeln('teste if');
   else
     writeln('teste else');
-
-  repeat
-    writeln('teste repeat');
-  until teste_repeat<9;
 
 end.
