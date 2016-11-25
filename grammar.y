@@ -173,6 +173,8 @@
         | LoopStatement
         | LoopStatement Body
         | ConditionalStatement
+        | ConditionalStatement Body
+        | Comment
         | Comment Body
         ;
 
@@ -243,18 +245,18 @@
         ;
 
     ConditionalStatement:
-        IfStatement
-        | ElseStatement {printf("else depos\n"); }
-        | END SEMICOLON
+        ConditionalBegin Body ConditionalEnd
+        | ConditionalBegin ConditionalStatement ConditionalEnd
         ;
 
-    IfStatement:
+    ConditionalBegin:
         IF LEFT_PARENTHESIS {writeIntoFile(file, "\n\tif(" );} Condition
-        RIGHT_PARENTHESIS {writeIntoFile(file, "){" );} THEN Body {printf("depois body\n");}
+        RIGHT_PARENTHESIS {writeIntoFile(file, "){" );} THEN  {printf("if statement\n"); }
         ;
 
-    ElseStatement:
-        ELSE IfStatement {printf("segundo if\n");}
+    ConditionalEnd:
+        ELSE  {printf("else statement\n"); } Body ConditionalEnd
+        | /* nothing */
         ;
 
     Condition:

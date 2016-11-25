@@ -7,6 +7,16 @@ begin
     read(teste);
   else if (teste >= 9) then
     read(teste);
-  end;
+  else
+    read(teste);
+
+    read(teste);
+    read(teste);
+    read(teste);
+    read(teste);
+    read(teste);
+    read(teste);
+    read(teste);
+
 
 end.
