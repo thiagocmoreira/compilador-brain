@@ -2,16 +2,16 @@ program teste;
 
 var
   variavel_teste, teste_condicao, teste_repeat, teste_while, contador: integer;
-  variavel, teste_condicao, teste_repeat, teste_while, contador: real;
+  variavel, condicao, repeticao: real;
 
 begin
-
-  read(tefsfs, sfsd);
-  read(asdas, asdasd);
+  // Comandos de entrada
+  read(variavel_teste);
+  read(contador, variavel, repeticao, condicao);
 
   // Comandos de saida
   write('teste write');
-  writeln('teste write');
+  writeln('teste writeln');
 
   (* Atribuicao aritmetica *)
   variavel_teste := (5 + 5);

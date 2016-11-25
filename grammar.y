@@ -193,7 +193,7 @@
         ;
 
     ReadFunctions:
-        READ {writeIntoFile(file, "scanf(\"");} LEFT_PARENTHESIS ReadPossibilities {
+        READ {tabulationCounter++; writeTabulation(file, tabulationCounter); writeIntoFile(file, "scanf(\""); tabulationCounter--;} LEFT_PARENTHESIS ReadPossibilities {
             writeIntoFile(file, "\", ");
             if(rootVariable != NULL){
                 ListVariable *aux = rootVariable;
@@ -211,7 +211,7 @@
             }else{
                 //nothing to do
             }
-        } RIGHT_PARENTHESIS SEMICOLON {writeIntoFile(file, ");\n");}
+        } RIGHT_PARENTHESIS SEMICOLON {tabulationCounter++; writeTabulation(file, tabulationCounter); writeIntoFile(file, ");\n"); tabulationCounter--;}
         | READLN LEFT_PARENTHESIS ReadPossibilities {
             writeIntoFile(file, "\", ");
             if(rootVariable != NULL){

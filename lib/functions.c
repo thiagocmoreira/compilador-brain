@@ -106,13 +106,13 @@ void writeSimpleAritmeticParenthesis(FILE *file, char *name, char *number1, char
     writeTabulation(file, indentation);
     strcat(print, name);
     strcat(print, " = ");
-    strcat(print, "( ");
+    strcat(print, "(");
     strcat(print, number1);
     strcat(print, " ");
     strcat(print, operator);
     strcat(print, " ");
     strcat(print, number2);
-    strcat(print, " )");
+    strcat(print, ")");
     strcat(print, ";\n");
     writeIntoFile(file, print);
 }
@@ -137,26 +137,26 @@ void writeForStructure(FILE *file, const char *variable, const char *number1, co
 void writeWhileStructure(FILE *file, const char *variable, const char *comparator, const char *number, int indentation){
     char print[300] = "";
     writeTabulation(file, indentation);
-    strcat(print, "while( ");
+    strcat(print, "while(");
     strcat(print, variable);
     strcat(print, " ");
     strcat(print, comparator);
     strcat(print, " ");
     strcat(print, number);
-    strcat(print, " ){\n");
+    strcat(print, "){\n");
     writeIntoFile(file, print);
 }
 
 void writeDoWhileStructure(FILE *file, const char *variable, const char *comparator, const char *number, int indentation){
     char print[300] = "";
     writeTabulation(file, indentation);
-    strcat(print, "}while( ");
+    strcat(print, "}while(");
     strcat(print, variable);
     strcat(print, " ");
     strcat(print, comparator);
     strcat(print, " ");
     strcat(print, number);
-    strcat(print, " );\n\n");
+    strcat(print, ");\n\n");
     writeIntoFile(file, print);
 }
 
