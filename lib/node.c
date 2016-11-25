@@ -47,26 +47,27 @@ Node *insertArrayVariableOnNode(ListVariable *listVariable, char *type, Node *no
 
 }
 
-unsigned int searchVariableOnNode(Node *node, char *name){
-
-    unsigned int variableFound = 0;
+Variable *searchVariableOnNode(Node *node, char *name){
 
     if(node != NULL){
         int compare = strcmp(node->variable->name, name);
         if(!compare){
-            variableFound = 1;
-            return variableFound;
+            return node->variable;
         }else{
+            Variable *variableFound = NULL;
             variableFound = searchVariableOnNode(node->left, name);
             if(!variableFound){
                 variableFound = searchVariableOnNode(node->right, name);
+            }else{
+                // nothing to do
             }
+            return variableFound;
         }
     }else{
         // nothing to do
     }
 
-    return variableFound;
+    return NULL;
 
 }
 

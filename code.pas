@@ -2,16 +2,11 @@ program teste;
 
 var
   variavel_teste, teste_condicao, teste_repeat, teste_while, contador: integer;
-  variavel_teste, teste_condicao, teste_repeat, teste_while, contador: real;
+  variavel, teste_condicao, teste_repeat, teste_while, contador: real;
 
 begin
 
-  // FUNDAMENTOS DE COMPILADORES
-  (* Compilador_Brain
-    DASDASDSA *)
-  // FCOMP_2016_02
-  (* Compilador_Brain *)
-  read(tefsfs, sfsd);
+  read(asdas, asdasd);
 
   write('teste write');
   variavel_teste := (5 + 5);

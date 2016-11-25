@@ -3,4 +3,5 @@ grammar.tab.c
 lex.yy.c
 program
 code.c
+test.*
 teste.c

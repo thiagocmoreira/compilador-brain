@@ -14,7 +14,7 @@ Node *insertVariableOnNode(Node *node, Variable *variable);
 
 Node *insertArrayVariableOnNode(ListVariable *listVariable, char *type, Node *node);
 
-unsigned int searchVariableOnNode(Node *node, char *name);
+Variable *searchVariableOnNode(Node *node, char *name);
 
 void insertVariablesOnFile(FILE *file, Node *node, char *type);
 
