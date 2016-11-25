@@ -10,7 +10,7 @@
 
     SymbolTable *symbolTable = NULL;
     Node *node = NULL;
-    unsigned int variableExists = 0;
+    Variable *variableExists = NULL;
 
     FILE *file = NULL;
     void openOutputFile(char *algorithm_name) {
@@ -193,26 +193,76 @@
         ;
 
     ReadFunctions:
-        READ {writeIntoFile(file, "scanf(\"");} LEFT_PARENTHESIS ReadPossibilities RIGHT_PARENTHESIS SEMICOLON {writeIntoFile(file, "\");\n");}
-        | READLN LEFT_PARENTHESIS ReadPossibilities RIGHT_PARENTHESIS SEMICOLON
+        READ {writeIntoFile(file, "scanf(\"");} LEFT_PARENTHESIS ReadPossibilities {
+            writeIntoFile(file, "\", ");
+            if(rootVariable != NULL){
+                ListVariable *aux = rootVariable;
+                while(aux != NULL){
+                    writeIntoFile(file, "&");
+                    writeIntoFile(file, aux->name);
+                    if(aux->next != NULL){
+                        writeIntoFile(file, ", ");
+                    }else{
+                        // nothing to do
+                    }
+                    aux = aux->next;
+                }
+                freeList();
+            }else{
+                //nothing to do
+            }
+        } RIGHT_PARENTHESIS SEMICOLON {writeIntoFile(file, ");\n");}
+        | READLN LEFT_PARENTHESIS ReadPossibilities {
+            writeIntoFile(file, "\", ");
+            if(rootVariable != NULL){
+                ListVariable *aux = rootVariable;
+                while(aux != NULL){
+                    writeIntoFile(file, "&");
+                    writeIntoFile(file, aux->name);
+                    if(aux->next != NULL){
+                        writeIntoFile(file, ", ");
+                    }else{
+                        // nothing to do
+                    }
+                    aux = aux->next;
+                }
+                freeList();
+            }else{
+                //nothing to do
+            }
+        } RIGHT_PARENTHESIS SEMICOLON {writeIntoFile(file, ");\n");}
         ;
 
     ReadPossibilities:
         IDENTIFIER {
             variableExists = searchVariableOnNode(node, $1);
-            if(!variableExists){
+            if(variableExists == NULL){
                 printf("Error: \'%s\' was not declarated on this scope.\n", $1);
             }else{
-                // nothing to do
+                insertVariableOnList($1);
+                if(!strcmp(variableExists->type, "int")){
+                    writeIntoFile(file, " %d ");
+                }else if(!strcmp(variableExists->type, "float")){
+                    writeIntoFile(file, " %f ");
+                }else{
+                    writeIntoFile(file, " %c ");
+                }
             }
 
         }
         | IDENTIFIER {
             variableExists = searchVariableOnNode(node, $1);
-            if(!variableExists){
+            if(variableExists == NULL){
                 printf("Error: \'%s\' was not declarated on this scope.\n", $1);
             }else{
-                // nothing to do
+                insertVariableOnList($1);
+                if(!strcmp(variableExists->type, "int")){
+                    writeIntoFile(file, " %d ");
+                }else if(!strcmp(variableExists->type, "float")){
+                    writeIntoFile(file, " %f ");
+                }else{
+                    writeIntoFile(file, " %c ");
+                }
             }
 
         } VIRGULA ReadPossibilities

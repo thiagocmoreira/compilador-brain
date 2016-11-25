@@ -2,11 +2,12 @@ program teste;
 
 var
   variavel_teste, teste_condicao, teste_repeat, teste_while, contador: integer;
-  variavel_teste, teste_condicao, teste_repeat, teste_while, contador: real;
+  variavel, teste_condicao, teste_repeat, teste_while, contador: real;
 
 begin
 
   read(tefsfs, sfsd);
+  read(asdas, asdasd);
 
   // Comandos de saida
   write('teste write');
