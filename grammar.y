@@ -129,16 +129,16 @@
 
 
     Variables:
-        IDENTIFIER  { insertVariableOnList($1); } VIRGULA Variables
-        | IDENTIFIER { insertVariableOnList($1); } COLON Type {
+        IDENTIFIER  {
+            checkingVariableBeforeInsert(node, variableExists, lineCounter, $1);
+        } VIRGULA Variables
+        | IDENTIFIER {
+            checkingVariableBeforeInsert(node, variableExists, lineCounter, $1);
+        } COLON Type {
 
-            variableType = $4;
-            // showList(); //correct implementation
-            //writeVariables(file);
             node = insertArrayVariableOnNode(rootVariable, $4, node);
-            showNode(node);
             if(node == NULL){
-                printf("Node is empty\n");
+                printf("Error: Impossible to create node variables. Node is empty.\n");
             }
             freeList(); //correct implementation
 
@@ -237,7 +237,7 @@
         IDENTIFIER {
             variableExists = searchVariableOnNode(node, $1);
             if(variableExists == NULL){
-                printf("Error: \'%s\' was not declarated on this scope.\n", $1);
+                printf("Error: Line %d. \'%s\' was not declarated on this scope.\n", lineCounter, $1);
             }else{
                 insertVariableOnList($1);
                 if(!strcmp(variableExists->type, "int")){
@@ -253,7 +253,7 @@
         | IDENTIFIER {
             variableExists = searchVariableOnNode(node, $1);
             if(variableExists == NULL){
-                printf("Error: \'%s\' was not declarated on this scope.\n", $1);
+                printf("Error: Line %d. \'%s\' was not declarated on this scope.\n", lineCounter, $1);
             }else{
                 insertVariableOnList($1);
                 if(!strcmp(variableExists->type, "int")){

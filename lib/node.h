@@ -20,4 +20,6 @@ void insertVariablesOnFile(FILE *file, Node *node, char *type);
 
 void writeVariablesOnFile(FILE *file, Node *node);
 
+void checkingVariableBeforeInsert(Node *node, Variable *variableExists, const int lineCounter, char *name);
+
 void destroyNode(Node* node);
