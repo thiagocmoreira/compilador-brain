@@ -5,17 +5,17 @@
 
 int main(int argc, char **argv){
 
-	if( teste >= 9 ){scanf("");
+	int teste;
 
-	if( teste >= 9 ){scanf("");
-scanf("");
-scanf("");
-scanf("");
-scanf("");
-scanf("");
-scanf("");
-scanf("");
-scanf("");
+	if( teste >= 9 ){
+	scanf(" %d ", &teste	);
+	}
+	else if( teste < 9 ){
+	scanf(" %d ", &teste	);
+
+	}else{
+	scanf(" %d ", &teste	);
+	}
 
 
 	return 0;

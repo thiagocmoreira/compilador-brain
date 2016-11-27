@@ -330,17 +330,18 @@
 
     ConditionalStatement:
         ConditionalBegin Body ConditionalEnd
-        | ConditionalBegin ConditionalStatement ConditionalEnd
         ;
 
     ConditionalBegin:
         IF LEFT_PARENTHESIS {writeIntoFile(file, "\n\tif(" );} Condition
-        RIGHT_PARENTHESIS {writeIntoFile(file, "){" );} THEN  {printf("if statement\n"); }
+        RIGHT_PARENTHESIS {writeIntoFile(file, "){\n" );} THEN
         ;
 
     ConditionalEnd:
-        ELSE  {printf("else statement\n"); } Body ConditionalEnd
-        |
+        ELSE {writeIntoFile(file, "\t}\n\telse " );} IF LEFT_PARENTHESIS {writeIntoFile(file, "if(" );} Condition
+        RIGHT_PARENTHESIS {writeIntoFile(file, "){\n" );} THEN Body ConditionalEnd
+        | ELSE  {writeIntoFile(file, "\n\t}else{\n" );} Body ConditionalEnd
+        | END SEMICOLON {writeIntoFile(file, "\t}\n" );}
         ;
 
 

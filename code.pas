@@ -37,5 +37,6 @@ begin
     writeln('teste if');
   else
     writeln('teste else');
+  end;
 
 end.

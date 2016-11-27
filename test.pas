@@ -1,20 +1,15 @@
 program test;
 
-var
+var 
+teste : integer;
 
 begin
   if (teste >= 9) then
     read(teste);
-  else if (teste >= 9) then
+  else if(teste < 9) then
     read(teste);
   else
     read(teste);
-    read(teste);
-    read(teste);
-    read(teste);
-    read(teste);
-    read(teste);
-    read(teste);
-    read(teste);
+  end;
 
 end.
