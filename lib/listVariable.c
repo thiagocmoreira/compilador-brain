@@ -38,6 +38,20 @@ void insertVariableOnList(char* name){
 
 }
 
+unsigned int searchVariableOnList(char *name){
+
+    ListVariable *aux;
+    aux = rootVariable;
+    while(aux != NULL){
+        if(!strcmp(aux->name, name)){
+            return 1;
+        }
+        aux = aux->next;
+    }
+
+    return 0;
+}
+
 void showList(){
 
     ListVariable *aux;

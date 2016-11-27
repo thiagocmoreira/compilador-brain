@@ -110,6 +110,22 @@ void writeVariablesOnFile(FILE *file, Node *node){
 
 }
 
+void checkingVariableBeforeInsert(Node *node, Variable *variableExists, const int lineCounter, char *name){
+    if(node == NULL){
+        if(searchVariableOnList(name)){
+            printf("Error: Line %d. Variable '%s' already exists.\n", lineCounter, name);
+        }else{
+            insertVariableOnList(name);
+        }
+    }else{
+        variableExists = searchVariableOnNode(node, name);
+        if(variableExists != NULL || searchVariableOnList(name)){
+            printf("Error: Line %d. Variable '%s' already exists.\n", lineCounter, name);
+        }else{
+            insertVariableOnList(name);
+        }
+    }
+}
 
 void destroyNode(Node* node) {
 
