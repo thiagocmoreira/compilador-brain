@@ -12,7 +12,7 @@ Node *newNode(Variable* variable);
 
 Node *insertVariableOnNode(Node *node, Variable *variable);
 
-Node *insertArrayVariableOnNode(ListVariable *listVariable, char *type, Node *node);
+Node *insertArrayVariableOnNode(ListVariable *listVariable, char *type, Node *node, const int line);
 
 Variable *searchVariableOnNode(Node *node, char *name);
 
@@ -22,4 +22,4 @@ void writeVariablesOnFile(FILE *file, Node *node);
 
 void checkingVariableBeforeInsert(Node *node, Variable *variableExists, const int lineCounter, char *name);
 
-void destroyNode(Node* node);
+void destroyNode(Node *node);

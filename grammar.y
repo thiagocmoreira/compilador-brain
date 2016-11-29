@@ -1,4 +1,7 @@
 %{
+    int yylex();
+    void yyerror(const char *error);
+
     #include <stdio.h>
     #include <stdlib.h>
     #include <string.h>
@@ -147,7 +150,7 @@
 
         } COLON Type {
 
-            node = insertArrayVariableOnNode(rootVariable, $4, node);
+            node = insertArrayVariableOnNode(rootVariable, $4, node, lineCounter);
             if(node == NULL){
                 printf("Error: Impossible to create node variables. Node is empty.\n");
             }
@@ -168,6 +171,12 @@
 
             writeMain(file);
 
+            if(node != NULL){
+                writeVariablesOnFile(file, node);
+            }else{
+                // nothing to do
+            }
+
         } END POINT {
 
             writeEndMain(file);
@@ -183,6 +192,7 @@
             }else{
                 // nothing to do
             }
+
         } Body END POINT {
 
             writeEndMain(file);
@@ -413,7 +423,7 @@
         ;
 
     ConditionalStatement:
-        ConditionalBegin Body ConditionalEnd
+        ConditionalBegin {tabulationCounter++;} Body {tabulationCounter--;} ConditionalEnd
         ;
 
     ConditionalBegin:
@@ -438,17 +448,16 @@
 
             writeIntoFile(file, "if(" );
 
-        } Condition
-        RIGHT_PARENTHESIS {
+        } Condition RIGHT_PARENTHESIS {
 
             writeIntoFile(file, "){\n" );
 
-        } THEN Body ConditionalEnd
+        } THEN {tabulationCounter++;} Body {tabulationCounter--;} ConditionalEnd
         | ELSE  {
 
             writeIntoFile(file, "\n\t}else{\n" );
 
-        } Body ConditionalEnd
+        } {tabulationCounter++;} Body {tabulationCounter--;} ConditionalEnd
         | END SEMICOLON {
 
             writeIntoFile(file, "\t}\n" );
@@ -543,7 +552,7 @@
 %%
 #include "lex.yy.c"
 
-int yyerror (void){
+void yyerror (const char *error){
 
 	printf("Erro na Linha: %d\n", lineCounter);
 
@@ -553,6 +562,11 @@ int yyerror (void){
 int main(void){
 
     yyparse();
+    printf("\n........................");
+    printf("\nSymbol Table\n");
+    showNode(node);
+
+    destroyNode(node);
 
     return 0;
 }

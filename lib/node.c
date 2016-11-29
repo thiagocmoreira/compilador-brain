@@ -32,13 +32,14 @@ Node *insertVariableOnNode(Node *node, Variable *variable){
     return node;
 }
 
-Node *insertArrayVariableOnNode(ListVariable *listVariable, char *type, Node *node){
+Node *insertArrayVariableOnNode(ListVariable *listVariable, char *type, Node *node, const int line){
 
     ListVariable *aux = listVariable;
 
     while(aux != NULL){
         Variable *variable = (Variable*)malloc(sizeof(Variable));
         variable->name = aux->name;
+        variable->line = line;
         variable->type = type;
         aux = aux->next;
         node = insertVariableOnNode(node, variable);
@@ -72,17 +73,19 @@ Variable *searchVariableOnNode(Node *node, char *name){
 }
 
 void showNode(Node *node){
+
+
     if(node != NULL){
+
         showNode(node->left);
-        // printf("Node->variable->name: %s\n", node->variable->name);
-        char print[30] = "";
-        strcat(print, node->variable->name);
-        strcat(print, ", ");
-        // printf("Node->variable->type: %s\n", node->variable->type);
+        printf("........................\n");
+        printf("Name: %s.\nType: %s.\nDeclared on line: %d.\n", node->variable->name, node->variable->type, node->variable->line);
         showNode(node->right);
+
     }else{
         // nothing to do
     }
+
 }
 
 void insertVariablesOnFile(FILE *file, Node *node, char *type){
@@ -127,17 +130,18 @@ void checkingVariableBeforeInsert(Node *node, Variable *variableExists, const in
     }
 }
 
-void destroyNode(Node* node) {
+void destroyNode(Node *node){
 
-    if(node != NULL){
+    if(node !=NULL){
+
         destroyNode(node->left);
         destroyNode(node->right);
 
-        free(node->variable);
-        node->variable = NULL;
-
         free(node);
         node = NULL;
+
+    }else{
+        // nothing to do
     }
 
 }
