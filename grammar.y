@@ -3,27 +3,32 @@
     #include <stdlib.h>
     #include <string.h>
     #include "global.h"
-    #include "lib/symbolTable.c"
+    #include "lib/node.c" // including symbolTable file, called Node
 
     extern int lineCounter;
     int tabulationCounter = 0; //variable to count how many tabulations we need to do to correct print on file
 
-    SymbolTable *symbolTable = NULL;
     Node *node = NULL;
     Variable *variableExists = NULL;
 
     FILE *file = NULL;
+
     void openOutputFile(char *algorithm_name) {
+
         if (!file) {
             char file_name[60];
             sprintf(file_name, "%s.c", algorithm_name);
             file = fopen(file_name, "w");
         }
+
     }
+
     void closeOutputFile() {
+
         if (file != NULL) {
             fclose(file);
         }
+
     }
 
 
@@ -117,8 +122,10 @@
 
     HeaderAlgorithm:
         PROGRAM IDENTIFIER SEMICOLON {
+
             openOutputFile($2);
             writeLibrary(file);
+
         }
         ;
 
@@ -130,10 +137,14 @@
 
     Variables:
         IDENTIFIER  {
+
             checkingVariableBeforeInsert(node, variableExists, lineCounter, $1);
+
         } VIRGULA Variables
         | IDENTIFIER {
+
             checkingVariableBeforeInsert(node, variableExists, lineCounter, $1);
+
         } COLON Type {
 
             node = insertArrayVariableOnNode(rootVariable, $4, node);
@@ -153,14 +164,31 @@
         ;
 
     FirstBegin:
-        BEGIN_STATEMENT {writeMain(file);} END POINT { writeEndMain(file);closeOutputFile();}
-        | BEGIN_STATEMENT {writeMain(file);} {
+        BEGIN_STATEMENT {
+
+            writeMain(file);
+
+        } END POINT {
+
+            writeEndMain(file);
+            closeOutputFile();
+
+        }
+        | BEGIN_STATEMENT {
+
+            writeMain(file);
+
             if(node != NULL){
                 writeVariablesOnFile(file, node);
             }else{
                 // nothing to do
             }
-        } Body END POINT { writeEndMain(file);closeOutputFile();}
+        } Body END POINT {
+
+            writeEndMain(file);
+            closeOutputFile();
+
+        }
         ;
 
     Body:
@@ -180,20 +208,32 @@
 
     WriteFunctions:
         WRITE LEFT_PARENTHESIS STRING RIGHT_PARENTHESIS SEMICOLON {
+
             tabulationCounter++;
             writeSimplePrint(file, $3, tabulationCounter);
             tabulationCounter--;
+
         }
         |
         WRITELN LEFT_PARENTHESIS STRING RIGHT_PARENTHESIS SEMICOLON {
+
             tabulationCounter++;
             writePrintLN(file, $3, tabulationCounter);
             tabulationCounter--;
+
         }
         ;
 
     ReadFunctions:
-        READ {tabulationCounter++; writeTabulation(file, tabulationCounter); writeIntoFile(file, "scanf(\""); tabulationCounter--;} LEFT_PARENTHESIS ReadPossibilities {
+        READ {
+
+            tabulationCounter++;
+            writeTabulation(file, tabulationCounter);
+            writeIntoFile(file, "scanf(\"");
+            tabulationCounter--;
+
+        } LEFT_PARENTHESIS ReadPossibilities {
+
             writeIntoFile(file, "\", ");
             if(rootVariable != NULL){
                 ListVariable *aux = rootVariable;
@@ -211,8 +251,17 @@
             }else{
                 //nothing to do
             }
-        } RIGHT_PARENTHESIS SEMICOLON {tabulationCounter++; writeTabulation(file, tabulationCounter); writeIntoFile(file, ");\n"); tabulationCounter--;}
+
+        } RIGHT_PARENTHESIS SEMICOLON {
+
+            tabulationCounter++;
+            writeTabulation(file, tabulationCounter);
+            writeIntoFile(file, ");\n");
+            tabulationCounter--;
+
+        }
         | READLN LEFT_PARENTHESIS ReadPossibilities {
+
             writeIntoFile(file, "\", ");
             if(rootVariable != NULL){
                 ListVariable *aux = rootVariable;
@@ -230,11 +279,17 @@
             }else{
                 //nothing to do
             }
-        } RIGHT_PARENTHESIS SEMICOLON {writeIntoFile(file, ");\n");}
+
+        } RIGHT_PARENTHESIS SEMICOLON {
+
+            writeIntoFile(file, ");\n");
+
+        }
         ;
 
     ReadPossibilities:
         IDENTIFIER {
+
             variableExists = searchVariableOnNode(node, $1);
             if(variableExists == NULL){
                 printf("Error: Line %d. \'%s\' was not declarated on this scope.\n", lineCounter, $1);
@@ -251,6 +306,7 @@
 
         }
         | IDENTIFIER {
+
             variableExists = searchVariableOnNode(node, $1);
             if(variableExists == NULL){
                 printf("Error: Line %d. \'%s\' was not declarated on this scope.\n", lineCounter, $1);
@@ -282,49 +338,77 @@
 
     Aritmetic:
         IDENTIFIER ASSIGNMENT Number Operator Number SEMICOLON{
+
             tabulationCounter++;
             writeSimpleAritmetic(file, $1, $3, $4, $5, tabulationCounter);
             tabulationCounter--;
+
         }
         | IDENTIFIER ASSIGNMENT LEFT_PARENTHESIS Number PLUS Number RIGHT_PARENTHESIS SEMICOLON{
+
             tabulationCounter++;
             writeSimpleAritmeticParenthesis(file, $1, $4, $5, $6, tabulationCounter);
             tabulationCounter--;
+
           }
         ;
 
     LoopStatement:
         FOR IDENTIFIER ASSIGNMENT NATURAL_NUMBER TO NATURAL_NUMBER DO {
+
             tabulationCounter++;
             writeForStructure(file, $2, $4, $6, tabulationCounter);
             tabulationCounter--;
+
         }
-        BEGIN_STATEMENT {tabulationCounter++; writeTabulation(file, tabulationCounter); tabulationCounter--;} Body END SEMICOLON {
+        BEGIN_STATEMENT {
+
+            tabulationCounter++;
+            writeTabulation(file, tabulationCounter);
+            tabulationCounter--;
+
+        } Body END SEMICOLON {
+
             tabulationCounter++;
             writeTabulation(file, tabulationCounter);
             writeIntoFile(file, "}");
             writeLineBreak(file, 2);
             tabulationCounter--;
+
         }
         | WHILE IDENTIFIER COMPARATORS Number DO {
+
             tabulationCounter++;
             writeWhileStructure(file, $2, $3, $4, tabulationCounter);
             tabulationCounter--;
+
         }
-        BEGIN_STATEMENT {tabulationCounter++; writeTabulation(file, tabulationCounter); tabulationCounter--;} Body END SEMICOLON {
+        BEGIN_STATEMENT {
+
+            tabulationCounter++;
+            writeTabulation(file, tabulationCounter);
+            tabulationCounter--;
+
+        } Body END SEMICOLON {
+
             tabulationCounter++;
             writeTabulation(file, tabulationCounter);
             writeIntoFile(file, "}");
             writeLineBreak(file, 1);
             tabulationCounter--;
+
         }
         | REPEAT {
+
             tabulationCounter++;
             writeTabulation(file, tabulationCounter);
             writeIntoFile(file, "do{\n");
+
         } Body UNTIL IDENTIFIER COMPARATORS Number SEMICOLON {
+
             writeDoWhileStructure(file, $5, $6, $7, tabulationCounter);
             tabulationCounter--;
+
         }
         ;
 
@@ -333,47 +417,141 @@
         ;
 
     ConditionalBegin:
-        IF LEFT_PARENTHESIS {writeIntoFile(file, "\n\tif(" );} Condition
-        RIGHT_PARENTHESIS {writeIntoFile(file, "){\n" );} THEN
+        IF LEFT_PARENTHESIS {
+
+            writeIntoFile(file, "\n\tif(" );
+
+        } Condition
+        RIGHT_PARENTHESIS {
+
+            writeIntoFile(file, "){\n" );
+
+        } THEN
         ;
 
     ConditionalEnd:
-        ELSE {writeIntoFile(file, "\t}\n\telse " );} IF LEFT_PARENTHESIS {writeIntoFile(file, "if(" );} Condition
-        RIGHT_PARENTHESIS {writeIntoFile(file, "){\n" );} THEN Body ConditionalEnd
-        | ELSE  {writeIntoFile(file, "\n\t}else{\n" );} Body ConditionalEnd
-        | END SEMICOLON {writeIntoFile(file, "\t}\n" );}
+        ELSE {
+
+            writeIntoFile(file, "\t}\n\telse " );
+
+        } IF LEFT_PARENTHESIS {
+
+            writeIntoFile(file, "if(" );
+
+        } Condition
+        RIGHT_PARENTHESIS {
+
+            writeIntoFile(file, "){\n" );
+
+        } THEN Body ConditionalEnd
+        | ELSE  {
+
+            writeIntoFile(file, "\n\t}else{\n" );
+
+        } Body ConditionalEnd
+        | END SEMICOLON {
+
+            writeIntoFile(file, "\t}\n" );
+
+        }
         ;
 
 
     Condition:
-        IDENTIFIER COMPARATORS Number {writeCondition(file, $1, $2, $3);}
-        | IDENTIFIER COMPARATORS IDENTIFIER {writeCondition(file, $1, $2, $3);}
+        IDENTIFIER COMPARATORS Number {
+
+            writeCondition(file, $1, $2, $3);
+
+        }
+        | IDENTIFIER COMPARATORS IDENTIFIER {
+
+            writeCondition(file, $1, $2, $3);
+
+        }
         ;
 
     Comment:
-        OPENING_BRACE {writeIntoFile(file, "\n"); tabulationCounter++; writeTabulation(file, tabulationCounter); tabulationCounter--; writeIntoFile(file, "/* " ); }
-        StringValue {writeIntoFile(file, $1); writeIntoFile(file, " ");} CLOSING_BRACE {writeIntoFile(file, "*/\n" );}
-        | OPENING_COMMENT {writeIntoFile(file, "\n"); tabulationCounter++; writeTabulation(file, tabulationCounter); tabulationCounter--; writeIntoFile(file, "/* " );}
-        StringValue CLOSING_COMMENT {writeIntoFile(file, "*/\n" );}
-        | DOUBLE_SLASH {writeIntoFile(file, "\n"); tabulationCounter++; writeTabulation(file, tabulationCounter); tabulationCounter--; writeIntoFile(file, "// " );}
-        StringValue {writeIntoFile(file, "\n" );}
+        OPENING_BRACE {
+
+            writeIntoFile(file, "\n");
+            tabulationCounter++;
+            writeTabulation(file, tabulationCounter);
+            tabulationCounter--;
+            writeIntoFile(file, "/* " );
+
+        }
+        StringValue {
+
+            writeIntoFile(file, $1);
+            writeIntoFile(file, " ");
+
+        } CLOSING_BRACE {
+
+            writeIntoFile(file, "*/\n" );
+
+        }
+        | OPENING_COMMENT {
+
+            writeIntoFile(file, "\n");
+            tabulationCounter++;
+            writeTabulation(file, tabulationCounter);
+            tabulationCounter--;
+            writeIntoFile(file, "/* " );
+
+        }
+        StringValue CLOSING_COMMENT {
+
+            writeIntoFile(file, "*/\n" );
+
+        }
+        | DOUBLE_SLASH {
+
+            writeIntoFile(file, "\n");
+            tabulationCounter++;
+            writeTabulation(file, tabulationCounter);
+            tabulationCounter--;
+            writeIntoFile(file, "// " );
+
+        }
+        StringValue {
+
+            writeIntoFile(file, "\n" );
+
+        }
         ;
 
     StringValue:
-        | IDENTIFIER {writeIntoFile(file, $1);} EOL StringValue
-        | IDENTIFIER {writeIntoFile(file, $1); writeIntoFile(file, " ");} StringValue
-        | IDENTIFIER {writeIntoFile(file, $1); writeIntoFile(file, " ");}
+        IDENTIFIER {
+
+            writeIntoFile(file, $1);
+
+        } EOL StringValue
+        | IDENTIFIER {
+
+            writeIntoFile(file, $1);
+            writeIntoFile(file, " ");
+
+        } StringValue
+        | IDENTIFIER {
+
+            writeIntoFile(file, $1);
+            writeIntoFile(file, " ");
+
+        }
         ;
 
 %%
 #include "lex.yy.c"
+
 int yyerror (void){
+
 	printf("Erro na Linha: %d\n", lineCounter);
+
 }
 
 //main function
 int main(void){
-    symbolTable = newSymbol();
+
     yyparse();
 
     return 0;
