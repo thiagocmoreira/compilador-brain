@@ -107,6 +107,7 @@
     %type <strval> Number
     %type <strval> Operator
     %type <strval> Aritmetic
+    %type <strval> WriteFunctions
     %type <strval> LoopStatement
     %type <strval> StringValue
     %type <strval> Comment
@@ -217,21 +218,92 @@
         ;
 
     WriteFunctions:
-        WRITE LEFT_PARENTHESIS STRING RIGHT_PARENTHESIS SEMICOLON {
+        WRITE LEFT_PARENTHESIS {
+
+            tabulationCounter++;
+            writeTabulation(file, tabulationCounter);
+            writeIntoFile(file, "printf(\"");
+            tabulationCounter--;
+
+        } WriteAlternatives {
+
+            writeIntoFile(file, "\", ");
+            writeVariableTypesForPrint(file, 0);
+
+        } RIGHT_PARENTHESIS SEMICOLON {writeIntoFile(file, ");\n");}
+        | WRITELN LEFT_PARENTHESIS {
+
+            tabulationCounter++;
+            writeTabulation(file, tabulationCounter);
+            writeIntoFile(file, "printf(\"");
+            tabulationCounter--;
+
+        } WriteAlternatives {
+
+            writeIntoFile(file, "\\n\", ");
+            writeVariableTypesForPrint(file, 0);
+
+        } RIGHT_PARENTHESIS SEMICOLON {writeIntoFile(file, ");\n");}
+        | WRITE LEFT_PARENTHESIS STRING RIGHT_PARENTHESIS SEMICOLON {
 
             tabulationCounter++;
             writeSimplePrint(file, $3, tabulationCounter);
             tabulationCounter--;
 
         }
-        |
-        WRITELN LEFT_PARENTHESIS STRING RIGHT_PARENTHESIS SEMICOLON {
+        | WRITE LEFT_PARENTHESIS STRING {
+
+            tabulationCounter++;
+            writeTabulation(file, tabulationCounter);
+            writeIntoFile(file, "printf(\"");
+            writeIntoFile(file, $3);
+            tabulationCounter--;
+
+        } WriteAlternatives {
+
+            writeIntoFile(file, "\", ");
+            writeVariableTypesForPrint(file, 0);
+
+
+        } RIGHT_PARENTHESIS SEMICOLON {writeIntoFile(file, ");\n");}
+        | WRITELN LEFT_PARENTHESIS STRING RIGHT_PARENTHESIS SEMICOLON {
 
             tabulationCounter++;
             writePrintLN(file, $3, tabulationCounter);
             tabulationCounter--;
 
         }
+        | WRITELN LEFT_PARENTHESIS STRING {
+
+            tabulationCounter++;
+            writeTabulation(file, tabulationCounter);
+            writeIntoFile(file, "printf(\"");
+            writeIntoFile(file, $3);
+            tabulationCounter--;
+
+
+        } WriteAlternatives {
+
+            writeIntoFile(file, "\\n\", ");
+            writeVariableTypesForPrint(file, 0);
+
+        } RIGHT_PARENTHESIS SEMICOLON {
+            writeIntoFile(file, ");\n");
+        }
+        ;
+
+    WriteAlternatives:
+        IDENTIFIER {
+
+            checkingVariableExistence(node, variableExists, lineCounter, $1, file);
+
+        } WriteAlternatives
+        | VIRGULA IDENTIFIER {
+
+            checkingVariableExistence(node, variableExists, lineCounter, $2, file);
+
+        } WriteAlternatives
+        | /* nothing to do */
         ;
 
     ReadFunctions:
@@ -244,51 +316,27 @@
 
         } LEFT_PARENTHESIS ReadPossibilities {
 
-            writeIntoFile(file, "\", ");
-            if(rootVariable != NULL){
-                ListVariable *aux = rootVariable;
-                while(aux != NULL){
-                    writeIntoFile(file, "&");
-                    writeIntoFile(file, aux->name);
-                    if(aux->next != NULL){
-                        writeIntoFile(file, ", ");
-                    }else{
-                        // nothing to do
-                    }
-                    aux = aux->next;
-                }
-                freeList();
-            }else{
-                //nothing to do
-            }
+            writeIntoFile(file, "\"");
+            writeIntoFile(file, ", ");
+            writeVariableTypesForPrint(file, 1);
 
         } RIGHT_PARENTHESIS SEMICOLON {
 
-            tabulationCounter++;
-            writeTabulation(file, tabulationCounter);
             writeIntoFile(file, ");\n");
-            tabulationCounter--;
 
         }
-        | READLN LEFT_PARENTHESIS ReadPossibilities {
+        | READLN {
 
-            writeIntoFile(file, "\", ");
-            if(rootVariable != NULL){
-                ListVariable *aux = rootVariable;
-                while(aux != NULL){
-                    writeIntoFile(file, "&");
-                    writeIntoFile(file, aux->name);
-                    if(aux->next != NULL){
-                        writeIntoFile(file, ", ");
-                    }else{
-                        // nothing to do
-                    }
-                    aux = aux->next;
-                }
-                freeList();
-            }else{
-                //nothing to do
-            }
+            tabulationCounter++;
+            writeTabulation(file, tabulationCounter);
+            writeIntoFile(file, "scanf(\"");
+            tabulationCounter--;
+
+        } LEFT_PARENTHESIS ReadPossibilities {
+
+            writeIntoFile(file, "\"");
+            writeIntoFile(file, ", ");
+            writeVariableTypesForPrint(file, 1);
 
         } RIGHT_PARENTHESIS SEMICOLON {
 
@@ -300,36 +348,12 @@
     ReadPossibilities:
         IDENTIFIER {
 
-            variableExists = searchVariableOnNode(node, $1);
-            if(variableExists == NULL){
-                printf("Error: Line %d. \'%s\' was not declarated on this scope.\n", lineCounter, $1);
-            }else{
-                insertVariableOnList($1);
-                if(!strcmp(variableExists->type, "int")){
-                    writeIntoFile(file, " %d ");
-                }else if(!strcmp(variableExists->type, "float")){
-                    writeIntoFile(file, " %f ");
-                }else{
-                    writeIntoFile(file, " %c ");
-                }
-            }
+            checkingVariableExistence(node, variableExists, lineCounter, $1, file);
 
         }
         | IDENTIFIER {
 
-            variableExists = searchVariableOnNode(node, $1);
-            if(variableExists == NULL){
-                printf("Error: Line %d. \'%s\' was not declarated on this scope.\n", lineCounter, $1);
-            }else{
-                insertVariableOnList($1);
-                if(!strcmp(variableExists->type, "int")){
-                    writeIntoFile(file, " %d ");
-                }else if(!strcmp(variableExists->type, "float")){
-                    writeIntoFile(file, " %f ");
-                }else{
-                    writeIntoFile(file, " %c ");
-                }
-            }
+            checkingVariableExistence(node, variableExists, lineCounter, $1, file);
 
         } VIRGULA ReadPossibilities
         ;

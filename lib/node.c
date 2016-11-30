@@ -130,6 +130,47 @@ void checkingVariableBeforeInsert(Node *node, Variable *variableExists, const in
     }
 }
 
+void checkingVariableExistence(Node *node, Variable *variableExists, const int lineCounter, char *name, FILE *file){
+
+    variableExists = searchVariableOnNode(node, name);
+    if(variableExists == NULL){
+        printf("Error: Line %d. \'%s\' was not declarated on this scope.\n", lineCounter, name);
+    }else{
+        insertVariableOnList(name);
+        if(!strcmp(variableExists->type, "int")){
+            writeIntoFile(file, " %d ");
+        }else if(!strcmp(variableExists->type, "float")){
+            writeIntoFile(file, " %f ");
+        }else{
+            writeIntoFile(file, " %c ");
+        }
+    }
+}
+
+void writeVariableTypesForPrint(FILE *file, unsigned const int scan){
+
+    if(rootVariable != NULL){
+        ListVariable *aux = rootVariable;
+        while(aux != NULL){
+            if(scan){
+                writeIntoFile(file, "&");
+            }else{
+                // nothing to do
+            }
+            writeIntoFile(file, aux->name);
+            if(aux->next != NULL){
+                writeIntoFile(file, ", ");
+            }else{
+                // nothing to do
+            }
+            aux = aux->next;
+        }
+        freeList();
+    }else{
+        //nothing to do
+    }
+}
+
 void destroyNode(Node *node){
 
     if(node !=NULL){

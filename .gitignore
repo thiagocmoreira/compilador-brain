@@ -1,7 +1,5 @@
 grammar.output
-grammar.tab.c
-lex.yy.c
 program
-code.c
-test.*
-teste.c
+lex.yy.c
+grammar.tab.c
+/*.c

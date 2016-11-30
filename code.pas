@@ -10,8 +10,13 @@ begin
   read(contador, variavel, repeticao, condicao);
 
   // Comandos de saida
+  write('teste write', variavel_teste);
   write('teste write');
-  writeln('teste writeln');
+  write(variavel);
+  write(variavel, variavel);
+  writeln(variavel, variavel, variavel);
+  writeln('teste write');
+  writeln('teste writeln', variavel, condicao);
 
   (* Atribuicao aritmetica *)
   variavel_teste := (5 + 5);

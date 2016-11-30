@@ -22,4 +22,8 @@ void writeVariablesOnFile(FILE *file, Node *node);
 
 void checkingVariableBeforeInsert(Node *node, Variable *variableExists, const int lineCounter, char *name);
 
+void checkingVariableExistence(Node *node, Variable *variableExists, const int lineCounter, char *name, FILE *file);
+
+void writeVariableTypesForPrint(FILE *file, unsigned const int scan);
+
 void destroyNode(Node *node);
