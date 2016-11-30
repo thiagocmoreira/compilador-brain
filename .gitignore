@@ -3,3 +3,4 @@ program
 lex.yy.c
 grammar.tab.c
 /*.c
+/results/*.c

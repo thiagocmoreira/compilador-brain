@@ -1,4 +1,4 @@
-program teste;
+program biggerCode;
 
 var
   variavel_teste, teste_condicao, teste_repeat, teste_while, contador: integer;
