@@ -19,7 +19,7 @@ begin
   writeln('teste writeln', variavel, condicao);
 
   (* Atribuicao aritmetica *)
-  variavel_teste := (5 + 5);
+  variavel_teste := 5.0;
   variavel_teste := 10.5 + 12.9;
 
   // Estruturas de repeticao

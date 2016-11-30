@@ -371,7 +371,18 @@
         ;
 
     Aritmetic:
-        IDENTIFIER ASSIGNMENT Number Operator Number SEMICOLON{
+        IDENTIFIER ASSIGNMENT Number SEMICOLON {
+
+            tabulationCounter++;
+            writeTabulation(file, tabulationCounter);
+            writeIntoFile(file, $1);
+            writeIntoFile(file, " := ");
+            writeIntoFile(file, $3);
+            writeIntoFile(file, ";\n");
+            tabulationCounter--;
+            
+        }
+        | IDENTIFIER ASSIGNMENT Number Operator Number SEMICOLON{
 
             tabulationCounter++;
             writeSimpleAritmetic(file, $1, $3, $4, $5, tabulationCounter);
